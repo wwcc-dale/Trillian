@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trillian — Component Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      padding: 40px 24px;
+      margin: 0;
+    }
+    h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 40px 0 12px;
+    }
+    h2:first-child { margin-top: 0; }
+  </style>
+</head>
+<body>
+
+  <h2>Progress Dashboard — row layout</h2>
+  <ul class="progress-dashboard">
+    <li>progress-dashboard</li>
+    <li>session: 3</li>
+    <li>module: 2</li>
+    <li>course-order: 7</li>
+    <li>course-name: Javascript</li>
+    <li>course-code: CS 140</li>
+    <li>total-sessions: 25</li>
+    <li>credits-per-course: 5</li>
+    <li>credits-per-session: 0.2</li>
+    <li>milestone-mini: 20</li>
+    <li>milestone-cert: 45</li>
+    <li>milestone-degree: 90</li>
+    <li>program-short-name: Graphic Design Essentials</li>
+    <li>program-short-title: Short Certificate</li>
+    <li>program-cert-name: Digital Design</li>
+    <li>program-cert-title: Certificate</li>
+    <li>program-degree-name: Graphic Design & Web Development</li>
+    <li>program-degree-title: AAS Degree</li>
+  </ul>
+
+  <h2>Progress Dashboard — column layout</h2>
+  <ul class="progress-dashboard">
+    <li>progress-dashboard</li>
+    <li>session: 14</li>
+    <li>module: 3</li>
+    <li>course-order: 7</li>
+    <li>course-name: Javascript</li>
+    <li>course-code: CS 140</li>
+    <li>layout: column</li>
+    <li>program-short-name: Graphic Design Essentials</li>
+    <li>program-cert-name: Digital Design</li>
+    <li>program-degree-name: Graphic Design & Web Development</li>
+  </ul>
+
+  <h2>Progress Dashboard — decimal session (Part 2)</h2>
+  <ul class="progress-dashboard">
+    <li>progress-dashboard</li>
+    <li>session: 7.2</li>
+    <li>module: 2</li>
+    <li>course-order: 4</li>
+    <li>course-name: Typography & Layout</li>
+    <li>course-code: GD 110</li>
+    <li>accent-color: #7b68ee</li>
+    <li>program-short-name: Graphic Design Essentials</li>
+    <li>program-cert-name: Digital Design</li>
+    <li>program-degree-name: Graphic Design & Web Development</li>
+  </ul>
+
+  <script src="../components/progress-dashboard.js"></script>
+</body>
+</html>
