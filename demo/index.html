@@ -765,55 +765,126 @@ def fibonacci(n: int) -> list[int]:
 
   <h2>pace-dashboard</h2>
 
-  <p class="variant">on track (demo data pre-seeded in localStorage)</p>
+  <!-- Dates: 2026-01-05 → 2026-05-01 (116 days). Midpoint ≈ today (2026-03-05) = day 59 → expectedFrac ≈ 0.51.
+       Expected pages ≈ 24.5.  Each gauge has course-id: demo-sN → separate localStorage key.
+         Way Behind  6 pages  pace 0.24    Behind   14 pages  pace 0.57
+         On Track   22 pages  pace 0.90    Ahead    34 pages  pace 1.39    Way Ahead  42 pages  pace 1.72 -->
+
+  <p class="variant">way behind — 6 of 48 pages</p>
   <div class="demo-pair">
     <div class="demo-preview">
       <ul>
         <li>pace-dashboard</li>
         <li>total-pages: 48</li>
-        <li>start-date: 2025-01-13</li>
-        <li>end-date: 2025-05-02</li>
-        <li>target-date: 2025-04-15</li>
+        <li>start-date: 2026-01-05</li>
+        <li>end-date: 2026-05-01</li>
+        <li>target-date: 2026-04-15</li>
+        <li>course-id: demo-s1</li>
       </ul>
     </div>
     <div class="demo-code"><pre><code>- pace-dashboard
 - total-pages: 48
-- start-date: 2025-01-13
-- end-date:   2025-05-02
-- target-date: 2025-04-15</code></pre></div>
+- start-date: 2026-01-05
+- end-date:   2026-05-01
+- target-date: 2026-04-15</code></pre></div>
   </div>
 
-  <p class="variant">behind (no target date)</p>
+  <p class="variant">behind — 14 of 48 pages</p>
   <div class="demo-pair">
     <div class="demo-preview">
       <ul>
         <li>pace-dashboard</li>
         <li>total-pages: 48</li>
-        <li>start-date: 2025-01-13</li>
-        <li>end-date: 2025-05-02</li>
+        <li>start-date: 2026-01-05</li>
+        <li>end-date: 2026-05-01</li>
+        <li>course-id: demo-s2</li>
       </ul>
     </div>
     <div class="demo-code"><pre><code>- pace-dashboard
 - total-pages: 48
-- start-date: 2025-01-13
-- end-date:   2025-05-02</code></pre></div>
+- start-date: 2026-01-05
+- end-date:   2026-05-01</code></pre></div>
+  </div>
+
+  <p class="variant">on track — 22 of 48 pages</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>pace-dashboard</li>
+        <li>total-pages: 48</li>
+        <li>start-date: 2026-01-05</li>
+        <li>end-date: 2026-05-01</li>
+        <li>target-date: 2026-04-15</li>
+        <li>course-id: demo-s3</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- pace-dashboard
+- total-pages: 48
+- start-date: 2026-01-05
+- end-date:   2026-05-01
+- target-date: 2026-04-15</code></pre></div>
+  </div>
+
+  <p class="variant">ahead — 34 of 48 pages, with target date</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>pace-dashboard</li>
+        <li>total-pages: 48</li>
+        <li>start-date: 2026-01-05</li>
+        <li>end-date: 2026-05-01</li>
+        <li>target-date: 2026-04-01</li>
+        <li>course-id: demo-s4</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- pace-dashboard
+- total-pages: 48
+- start-date: 2026-01-05
+- end-date:   2026-05-01
+- target-date: 2026-04-01</code></pre></div>
+  </div>
+
+  <p class="variant">way ahead — 42 of 48 pages, pace-metric: completed</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>pace-dashboard</li>
+        <li>total-pages: 48</li>
+        <li>start-date: 2026-01-05</li>
+        <li>end-date: 2026-05-01</li>
+        <li>pace-metric: completed</li>
+        <li>course-id: demo-s5</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- pace-dashboard
+- total-pages: 48
+- start-date: 2026-01-05
+- end-date:   2026-05-01
+- pace-metric: completed</code></pre></div>
   </div>
 
   <!-- ── Scripts ──────────────────────────────────────────────────────────── -->
 
-  <!-- Seed demo localStorage for pace-dashboard (simulates real page tracking) -->
+  <!-- Seed five separate localStorage keys — one per gauge (course-id: demo-sN).
+       Page counts are chosen to hit each pace zone at today's date (day ~59 of 116). -->
   <script>
     (function () {
-      var key = 'trl-pace-log-demo-demo';
-      // 28 pages visited over ~7 weeks of a 48-page course
-      // Course started 2025-01-13, today is ~2025-03-05 = 51 days elapsed
-      // Expected: 51/109 * 48 ≈ 22 pages. Actual: 28. paceRatio ≈ 1.27 (Ahead)
-      var log = [];
-      var base = new Date('2025-01-13').getTime();
-      for (var i = 0; i < 28; i++) {
-        log.push({ url: '/courses/demo/pages/week-' + (i + 1), t: base + i * 1.6 * 86400000 });
+      var base = new Date('2026-01-05').getTime();
+      function entry(i, vs, ss, ts) {
+        return { url: '/demo/page-' + i, t: base + i * 1.4 * 86400000, vs: vs, ss: ss, ts: ts };
       }
-      try { localStorage.setItem(key, JSON.stringify(log)); } catch (_) {}
+      var SCENARIOS = [
+        { key: 'trl-pace-data-demo-s1-demo', n:  6, vs: 0.55, ss: 0.40, ts: 0.8 },
+        { key: 'trl-pace-data-demo-s2-demo', n: 14, vs: 0.70, ss: 0.60, ts: 0.9 },
+        { key: 'trl-pace-data-demo-s3-demo', n: 22, vs: 0.85, ss: 0.80, ts: 1.0 },
+        { key: 'trl-pace-data-demo-s4-demo', n: 34, vs: 1.00, ss: 0.95, ts: 1.0 },
+        { key: 'trl-pace-data-demo-s5-demo', n: 42, vs: 1.00, ss: 1.00, ts: 1.0 },
+      ];
+      SCENARIOS.forEach(function (s) {
+        var log = [];
+        for (var i = 0; i < s.n; i++) log.push(entry(i, s.vs, s.ss, s.ts));
+        try { localStorage.setItem(s.key, JSON.stringify(log)); } catch (_) {}
+      });
     })();
   </script>
 

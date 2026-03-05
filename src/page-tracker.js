@@ -1,25 +1,30 @@
 /**
- * Page Tracker
+ * Page Tracker — continuous engagement scoring
  *
- * Runs silently on every Canvas page. Logs each unique course content page
- * visit to localStorage — first visit only, timestamped at page entry.
+ * Tracks three raw signals per page visit, stored as 0–1 floats:
  *
- * Only logs after THRESHOLD_MS of *visible* time (time while the page tab
- * is in the foreground). This filters out:
- *   - Students skimming ahead or briefly glancing at a future page
- *   - Accidental clicks / quick navigation errors
- *   - Pages left open in background tabs
+ *   vs  visible score   visibleMs / 45 000 ms, clamped to 1
+ *   ss  scroll score    max scroll depth reached (0 = top, 1 = bottom)
+ *   ts  tabs score      tabsSeen / tabsTotal (1 if no tabs on page)
  *
- * The timestamp stored is when the student ARRIVED at the page (not when
- * the threshold was crossed), giving accurate pace data.
+ * Composite score: (vs + ss × ts) / 2
+ *   ≥ 0.5  → page "counts" toward pace (default threshold for dashboard)
+ *   = 1.0  → fully completed (read through, scrolled all the way, saw all tabs)
+ *
+ * All three signals are tracked in memory and persisted on visibilitychange
+ * (tab switch) and pagehide (navigation away / close). No excessive writes.
  *
  * No markup required. Include in Canvas Admin → Account → Settings → Custom JS.
  *
- * Storage key : trl-pace-log-{courseId}-{userId}
- * Storage value: [{url: "/courses/1/pages/intro", t: 1709654321000}, ...]
+ * Storage key : trl-pace-data-{courseId}-{userId}
+ * Storage item: {url, t, vs, ss, ts}
+ *   url  path visited
+ *   t    arrival timestamp
+ *   vs   visible score  (0–1)
+ *   ss   scroll score   (0–1)
+ *   ts   tabs score     (0–1)
  *
- * Tracked page types: pages, assignments, quizzes, discussion_topics,
- *                     module items (which redirect to the above).
+ * Tracked page types: pages, assignments, quizzes, discussion_topics, module items.
  */
 
 const ENV      = window.ENV;
@@ -27,60 +32,122 @@ const courseId = ENV && ENV.COURSE_ID;
 const userId   = ENV && ENV.current_user_id;
 
 if (courseId && userId) {
-  const CONTENT = /^\/courses\/\d+\/(pages|assignments|quizzes|discussion_topics|modules\/items)\//;
-  const url = window.location.pathname;
+  const CONTENT    = /^\/courses\/\d+\/(pages|assignments|quizzes|discussion_topics|modules\/items)\//;
+  const url        = window.location.pathname;
+  const VISIT_MS   = 45000; // 45 s = vs reaches 1.0
 
   if (CONTENT.test(url)) {
-    const key       = 'trl-pace-log-' + courseId + '-' + userId;
-    const THRESHOLD = 45000; // 45 s of visible time = genuine engagement
+    const dataKey   = 'trl-pace-data-' + courseId + '-' + userId;
     const arrivedAt = Date.now();
 
-    let visibleMs   = 0;
-    let lastVisible = arrivedAt;
-    let logged      = false;
+    // ── Load / init entry ──────────────────────────────────────────────────
 
-    // Check if already logged from a previous visit
-    try {
-      const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      if (Array.isArray(existing) && existing.some(function(e) { return e.url === url; })) {
-        logged = true; // already counted — nothing to do
+    function loadAll() {
+      try { return JSON.parse(localStorage.getItem(dataKey) || '[]') || []; } catch (_) { return []; }
+    }
+    function saveAll(arr) {
+      try { localStorage.setItem(dataKey, JSON.stringify(arr)); } catch (_) {}
+    }
+
+    let data = loadAll();
+    let entry = data.find(function(e) { return e.url === url; });
+    if (!entry) {
+      entry = { url: url, t: arrivedAt, vs: 0, ss: 0, ts: 1 };
+      data.push(entry);
+    }
+
+    // ── Persist current entry ──────────────────────────────────────────────
+
+    function persist() {
+      const all = loadAll();
+      const idx = all.findIndex(function(e) { return e.url === url; });
+      if (idx > -1) all[idx] = entry; else all.push(entry);
+      saveAll(all);
+    }
+
+    // ── Visible time (vs) ──────────────────────────────────────────────────
+
+    let visibleMs   = entry.vs * VISIT_MS; // resume from previous visit
+    let lastVisible = Date.now();
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'hidden') {
+        visibleMs += Date.now() - lastVisible;
+        entry.vs = Math.min(1, visibleMs / VISIT_MS);
+        persist();
+      } else {
+        lastVisible = Date.now();
       }
-    } catch (_) {}
+    });
 
-    if (!logged) {
-      function tryLog() {
-        if (logged) return;
-        if (visibleMs >= THRESHOLD) {
-          logged = true;
-          try {
-            let log = JSON.parse(localStorage.getItem(key) || '[]');
-            if (!Array.isArray(log)) log = [];
-            if (!log.some(function(e) { return e.url === url; })) {
-              log.push({ url: url, t: arrivedAt });
-              localStorage.setItem(key, JSON.stringify(log));
-            }
-          } catch (_) {}
-        }
+    window.addEventListener('pagehide', function() {
+      if (document.visibilityState !== 'hidden') {
+        visibleMs += Date.now() - lastVisible;
+      }
+      entry.vs = Math.min(1, visibleMs / VISIT_MS);
+      persist();
+    });
+
+    // ── Scroll depth (ss) ──────────────────────────────────────────────────
+
+    function checkScroll() {
+      const pct = (window.scrollY + window.innerHeight) / Math.max(1, document.body.scrollHeight);
+      if (pct > entry.ss) {
+        entry.ss = Math.min(1, pct);
+        // Persist on scroll milestones (every 25%) to avoid excessive writes
+        if (entry.ss >= Math.ceil(entry.ss / 0.25) * 0.25) persist();
+      }
+    }
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll(); // handle pages already fully in view
+
+    // ── Tabs score (ts) ───────────────────────────────────────────────────
+    // Wait one tick so Trillian tab components (tabs.js, flow-panels.js) have
+    // had time to run their synchronous DOMContentLoaded initialisers.
+
+    function initTabTracking() {
+      const tabs  = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+      const total = tabs.length;
+
+      if (total === 0) {
+        entry.ts = 1; // no tabs → criterion auto-met
+        return;
       }
 
-      // Track visible time: pause when tab hides, resume when tab shows.
-      document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'hidden') {
-          visibleMs += Date.now() - lastVisible;
-          tryLog();
-        } else {
-          lastVisible = Date.now();
+      const seen = {};
+      tabs.forEach(function(tab) {
+        // First tab in each widget is auto-selected on init
+        if (tab.getAttribute('aria-selected') === 'true') {
+          seen[tab.id || tab.textContent.trim()] = true;
         }
       });
 
-      // Catch navigation away (back button, link click, browser close).
-      window.addEventListener('pagehide', function() {
-        // If page was visible up to this moment, count the remaining time.
-        if (document.visibilityState !== 'hidden') {
-          visibleMs += Date.now() - lastVisible;
-        }
-        tryLog();
+      function update() {
+        entry.ts = Math.min(1, Object.keys(seen).length / total);
+      }
+      update();
+
+      // Watch aria-selected changes (covers mouse click AND keyboard arrow nav)
+      const obs = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          if (m.attributeName === 'aria-selected' &&
+              m.target.getAttribute('aria-selected') === 'true') {
+            seen[m.target.id || m.target.textContent.trim()] = true;
+            update();
+            if (entry.ts >= 1) obs.disconnect();
+          }
+        });
       });
+
+      tabs.forEach(function(tab) {
+        obs.observe(tab, { attributes: true, attributeFilter: ['aria-selected'] });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() { setTimeout(initTabTracking, 0); });
+    } else {
+      setTimeout(initTabTracking, 0);
     }
   }
 }

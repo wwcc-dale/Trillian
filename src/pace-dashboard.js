@@ -4,26 +4,28 @@
  * Shows a student's learning pace relative to the expected course timeline,
  * a projected completion date, and optional on/off-track vs a target date.
  *
- * Page visits are tracked by page-tracker.js (must be loaded on all pages).
- * This component reads that log and renders the derived metrics.
+ * Reads two metrics logged by page-tracker.js:
+ *   Level 1 — visited   : 45 s of visible time on the page
+ *   Level 2 — completed : visited + scrolled ≥ 85% + all tabs viewed
  *
  * Markup (markdown):
  *   - pace-dashboard
- *   - total-pages: 48
- *   - start-date:  2025-01-13
- *   - end-date:    2025-05-02
- *   - target-date: 2025-04-01    ← optional: shows days before/after target
+ *   - total-pages:  48
+ *   - start-date:   2025-01-13
+ *   - end-date:     2025-05-02
+ *   - target-date:  2025-04-01    ← optional: on/off-track pill
+ *   - pace-metric:  completed     ← optional: 'visited' (default) or 'completed'
  *
- * Storage key (shared with page-tracker):
- *   trl-pace-log-{courseId}-{userId}   (per Canvas origin, per course, per user)
+ * Storage keys (written by page-tracker.js):
+ *   trl-pace-log-{courseId}-{userId}  → [{url, t}, ...]  Level 1 visits
+ *   trl-pace-done-{courseId}-{userId} → [url, ...]        Level 2 completions
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
 
 const MARKER = 'pace-dashboard';
 
 // ── Pace zones ──────────────────────────────────────────────────────────────
-// paceRatio: actual_progress_fraction / expected_progress_fraction
-// 1.0 = exactly on schedule; <1 = behind; >1 = ahead
+// paceRatio: actual_progress / expected_progress. 1.0 = exactly on schedule.
 
 const ZONES = [
   { lo: 0,   color: '#ef4444', label: 'Way Behind' },
@@ -39,20 +41,24 @@ function zoneFor(pace) {
   return z;
 }
 
-// ── SVG gauge ───────────────────────────────────────────────────────────────
-// Semicircle speedometer. Uses stroke-dasharray + rotate (same technique as
-// progress-dashboard) — avoids SVG arc path direction complexity.
+// ── SVG gauge ────────────────────────────────────────────────────────────────
+// Horseshoe-style arc-fill semicircle — same visual language as progress-dashboard.
 //
-// Zones: 5 equal segments covering left→top→right (180° of arc).
-// Needle: line from centre, angle mapped from paceRatio [0–2] → [180°–0°].
+// Background: dim gray semicircle track (left → top → right, 180°).
+// Foreground: zone-colored arc that grows from left toward right as pace increases.
+//   paceRatio 0   → arc empty  (Way Behind, gauge shows nothing)
+//   paceRatio 1   → arc halfway through semicircle (On Track, at the top)
+//   paceRatio 2   → arc fills the full semicircle (Way Ahead, at the right)
+//
+// Tick marks at the 4 zone boundaries (pace 0.4 / 0.8 / 1.2 / 1.6).
+// Zone labels: "Behind" at left end, "Ahead" at right end.
 
-const NS  = 'http://www.w3.org/2000/svg';
-const R   = 88;           // arc radius
-const SW  = 20;           // zone stroke-width
-const CX  = 130, CY = 130;
+const NS   = 'http://www.w3.org/2000/svg';
+const R    = 90;
+const SW   = 18;                    // stroke width
+const CX   = 130, CY = 130;
 const CIRC = 2 * Math.PI * R;
-const SEMI = CIRC / 2;    // full semicircle arc length
-const ZONE_LEN = SEMI / 5;
+const SEMI = CIRC / 2;             // visible track = top semicircle
 
 function el(tag, attrs) {
   const e = document.createElementNS(NS, tag);
@@ -60,73 +66,90 @@ function el(tag, attrs) {
   return e;
 }
 
-// Needle tip position for a given paceRatio (clamped [0,2] → angle [180°,0°])
-function needlePt(pace) {
-  const angle = (180 - Math.min(2, Math.max(0, pace)) * 90) * Math.PI / 180;
-  const nr = R - SW / 2 - 4; // just inside the arc
-  return [CX + nr * Math.cos(angle), CY - nr * Math.sin(angle)];
+function toXY(deg) {
+  const r = deg * Math.PI / 180;
+  return [CX + R * Math.cos(r), CY - R * Math.sin(r)];
 }
 
 function buildGauge(pace) {
-  const zone = zoneFor(pace);
-  const svg  = el('svg', { viewBox: '0 0 260 138', 'aria-hidden': 'true', style: 'width:100%' });
+  const zone    = zoneFor(pace);
+  const fillLen = Math.min(SEMI, Math.max(0, (pace / 2) * SEMI));
+  const offset  = CIRC - fillLen;
 
-  // One group, rotated so the semicircle sits at the TOP (left→top→right).
-  // rotate(180) makes the stroke start at 9-o'clock and sweep clockwise through the top.
-  // Each zone circle uses a 3-value stroke-dasharray: [skip] [show] [gap]
-  // where skip = i*ZONE_LEN positions the visible arc at the correct zone.
+  // viewBox height 145 gives room for the hub circle (r=9) below CY=130
+  const svg = el('svg', { viewBox: '0 0 260 145', 'aria-hidden': 'true', style: 'width:100%' });
+
+  // rotate(180) makes the stroke start at 9-o'clock, sweeping clockwise through the top.
   const g = el('g', { transform: 'rotate(180 ' + CX + ' ' + CY + ')' });
 
-  ZONES.forEach((z, i) => {
-    const skip = (i * ZONE_LEN).toFixed(2);
-    const rest = (CIRC - (i + 1) * ZONE_LEN).toFixed(2);
-    g.appendChild(el('circle', {
-      cx: CX, cy: CY, r: R,
-      fill: 'none', stroke: z.color,
-      'stroke-width': SW,
-      'stroke-dasharray': skip + ' ' + ZONE_LEN.toFixed(2) + ' ' + rest,
-      opacity: zone === z ? '1' : '0.18',
-      'stroke-linecap': 'butt',
-    }));
+  // Gray background track (full semicircle) — round caps give horseshoe pill ends
+  g.appendChild(el('circle', {
+    cx: CX, cy: CY, r: R,
+    fill: 'none', stroke: '#e8e4df',
+    'stroke-width': SW,
+    'stroke-dasharray': SEMI.toFixed(2) + ' ' + SEMI.toFixed(2),
+    'stroke-linecap': 'round',
+  }));
+
+  // Colored fill arc — round cap on leading edge
+  const arc = el('circle', {
+    cx: CX, cy: CY, r: R,
+    fill: 'none', stroke: zone.color,
+    'stroke-width': SW,
+    'stroke-dasharray': CIRC.toFixed(2),
+    'stroke-dashoffset': CIRC.toFixed(2), // always start at 0 for animation
+    'stroke-linecap': 'round',
   });
+  arc.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s ease';
+  g.appendChild(arc);
 
   svg.appendChild(g);
 
-  // Zone separator tick marks (4 marks between 5 zones).
-  // Each at paceRatio 0.4, 0.8, 1.2, 1.6 → SVG angle = 180 - ratio*90
+  // Zone boundary tick marks (pace 0.4, 0.8, 1.2, 1.6 → angles 144°, 108°, 72°, 36°)
   [0.4, 0.8, 1.2, 1.6].forEach(p => {
-    const ang = (180 - p * 90) * Math.PI / 180;
-    const ri = R - SW / 2 - 5;
-    const ro = R + SW / 2 + 5;
-    const xi = CX + ri * Math.cos(ang), yi = CY - ri * Math.sin(ang);
-    const xo = CX + ro * Math.cos(ang), yo = CY - ro * Math.sin(ang);
+    const angle = 180 - p * 90;
+    const [x1, y1] = [CX + (R - SW / 2 - 1) * Math.cos(angle * Math.PI / 180),
+                      CY - (R - SW / 2 - 1) * Math.sin(angle * Math.PI / 180)];
+    const [x2, y2] = [CX + (R + SW / 2 + 1) * Math.cos(angle * Math.PI / 180),
+                      CY - (R + SW / 2 + 1) * Math.sin(angle * Math.PI / 180)];
     svg.appendChild(el('line', {
-      x1: xi.toFixed(1), y1: yi.toFixed(1),
-      x2: xo.toFixed(1), y2: yo.toFixed(1),
+      x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1),
       stroke: '#fff', 'stroke-width': '2.5',
     }));
   });
 
-  // Needle
-  const [nx, ny] = needlePt(pace);
-  svg.appendChild(el('line', {
-    x1: CX, y1: CY, x2: nx.toFixed(2), y2: ny.toFixed(2),
-    stroke: zone.color, 'stroke-width': '3.5', 'stroke-linecap': 'round',
+  // Needle — drawn pointing LEFT (pace=0), rotated clockwise by pace×90° via CSS
+  // Triangle tip reaches just inside the arc; base is at center (covered by hub).
+  const NR  = R - SW / 2 - 4;  // tip radius
+  const W   = 5;                 // half-width of needle base
+  const needleG = el('g', {});
+  needleG.appendChild(el('polygon', {
+    points: (CX - NR).toFixed(1) + ',' + CY
+          + ' ' + CX + ',' + (CY - W)
+          + ' ' + CX + ',' + (CY + W),
+    fill: zone.color,
   }));
+  // Hub — white circle with colored border covers the needle base
+  needleG.appendChild(el('circle', {
+    cx: CX, cy: CY, r: 9,
+    fill: '#fff', stroke: zone.color, 'stroke-width': '2.5',
+  }));
+  svg.appendChild(needleG);
+  needleG.style.transformOrigin = CX + 'px ' + CY + 'px';
+  needleG.style.transform = 'rotate(0deg)';
+  needleG.style.transition = 'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)';
 
-  // Pivot dot
-  svg.appendChild(el('circle', { cx: CX, cy: CY, r: '7', fill: zone.color }));
-
-  // End labels: "Behind" at left, "Ahead" at right
-  function svgText(x, y, anchor, txt) {
-    const t = el('text', { x, y, 'text-anchor': anchor, 'font-size': '10', fill: '#bbb', 'font-family': 'system-ui,sans-serif' });
-    t.textContent = txt;
+  // End labels
+  function txt(x, y, anchor, content) {
+    const t = el('text', { x, y, 'text-anchor': anchor,
+      'font-size': '10', fill: '#bbb', 'font-family': 'system-ui,sans-serif' });
+    t.textContent = content;
     return t;
   }
-  svg.appendChild(svgText('14',  '132', 'start', 'Behind'));
-  svg.appendChild(svgText('246', '132', 'end',   'Ahead'));
+  svg.appendChild(txt('18',  '132', 'start', 'Behind'));
+  svg.appendChild(txt('242', '132', 'end',   'Ahead'));
 
-  return svg;
+  return { svg, arc, needleG };
 }
 
 // ── Styles ───────────────────────────────────────────────────────────────────
@@ -149,7 +172,7 @@ function injectStyles() {
       font-size: 22px;
       font-weight: 800;
       text-align: center;
-      margin: 6px 0 2px;
+      margin: 4px 0 2px;
       letter-spacing: -0.02em;
     }
     .trl-pace-sub {
@@ -173,6 +196,7 @@ function injectStyles() {
     }
     .trl-pace-row-label { color: #aaa; }
     .trl-pace-row-value { font-weight: 600; color: #222; }
+    .trl-pace-row-value.trl-pace-dim { color: #bbb; font-weight: 400; }
     .trl-pace-track-pill {
       display: flex;
       align-items: center;
@@ -192,19 +216,25 @@ function injectStyles() {
 }
 
 // ── Data helpers ─────────────────────────────────────────────────────────────
+// Storage: trl-pace-data-{cid}-{uid} → [{url, t, vs, ss, ts}]
+//   vs  visible score   0–1  (1 = 45 s+ visible)
+//   ss  scroll score    0–1  (1 = scrolled to bottom)
+//   ts  tabs score      0–1  (1 = all tabs viewed, or no tabs present)
+// Composite: (vs + ss * ts) / 2  → 0–1
 
-function logKey() {
+function dataKey(cfg) {
   const E = window.ENV;
-  return 'trl-pace-log-' + (E && E.COURSE_ID || 'demo') + '-' + (E && E.current_user_id || 'demo');
+  const cid = cfg['course-id'] || (E && E.COURSE_ID)       || 'demo';
+  const uid = cfg['user-id']   || (E && E.current_user_id) || 'demo';
+  return 'trl-pace-data-' + cid + '-' + uid;
 }
 
-function getLog() {
-  try {
-    const v = localStorage.getItem(logKey());
-    const a = v ? JSON.parse(v) : [];
-    return Array.isArray(a) ? a : [];
-  } catch (_) { return []; }
+function loadData(cfg) {
+  try { return JSON.parse(localStorage.getItem(dataKey(cfg)) || '[]') || []; }
+  catch (_) { return []; }
 }
+
+function composite(e) { return (e.vs + e.ss * e.ts) / 2; }
 
 function parseDate(s) {
   if (!s) return null;
@@ -221,7 +251,6 @@ function fmt(d) {
 function initOne(ul) {
   injectStyles();
 
-  // Parse key-value pairs from list items
   const cfg = {};
   Array.from(ul.querySelectorAll(':scope > li')).slice(1).forEach(li => {
     const t = li.textContent.trim();
@@ -233,34 +262,44 @@ function initOne(ul) {
   const startDate  = parseDate(cfg['start-date']);
   const endDate    = parseDate(cfg['end-date']);
   const targetDate = parseDate(cfg['target-date'] || '');
+  const metric     = (cfg['pace-metric'] || 'counted').toLowerCase(); // visited|completed|counted
   if (!totalPages || !startDate || !endDate) return;
 
-  const log          = getLog();
-  const pagesVisited = log.length;
-  const now          = Date.now();
-  const msElapsed    = Math.max(43200000, now - startDate.getTime()); // min 12h
-  const msTotal      = endDate.getTime() - startDate.getTime();
-  const daysElapsed  = msElapsed / 86400000;
+  const data      = loadData(cfg);
+  // visited:   vs ≥ 0.5  (22.5 s+ in foreground)
+  // completed: vs = 1 AND ss × ts = 1  (fully read + scrolled + all tabs)
+  // counted:   composite ≥ 0.5  (default — balanced metric)
+  const visited   = data.filter(e => e.vs   >= 0.5).length;
+  const completed = data.filter(e => e.vs   >= 1 && e.ss * e.ts >= 1).length;
+  const counted   = data.filter(e => composite(e) >= 0.5).length;
 
-  const expectedFrac = Math.min(1, msElapsed / msTotal);
-  const actualFrac   = pagesVisited / totalPages;
-  const pace         = expectedFrac > 0 ? actualFrac / expectedFrac : 0;
+  const pagesUsed = metric === 'completed' ? completed
+                  : metric === 'visited'   ? visited
+                  : counted;
 
-  const pagesPerDay    = pagesVisited / daysElapsed;
-  const remaining      = totalPages - pagesVisited;
-  const projectedDate  = (pagesPerDay > 0 && remaining > 0)
+  const now         = Date.now();
+  const msElapsed   = Math.max(43200000, now - startDate.getTime()); // min 12 h
+  const msTotal     = endDate.getTime() - startDate.getTime();
+  const daysElapsed = msElapsed / 86400000;
+
+  const expectedFrac  = Math.min(1, msElapsed / msTotal);
+  const pace          = expectedFrac > 0 ? (pagesUsed / totalPages) / expectedFrac : 0;
+  const zone          = zoneFor(pace);
+
+  const pagesPerDay   = pagesUsed / daysElapsed;
+  const remaining     = totalPages - pagesUsed;
+  const projectedDate = (pagesPerDay > 0 && remaining > 0)
     ? new Date(now + (remaining / pagesPerDay) * 86400000)
-    : (pagesVisited >= totalPages ? new Date(now) : null);
-
-  const zone = zoneFor(pace);
+    : (pagesUsed >= totalPages ? new Date(now) : null);
 
   // ── Build widget ───────────────────────────────────────────────────────────
 
   const wrap = document.createElement('div');
   wrap.className = 'trl-pace-widget';
 
-  // Gauge
-  wrap.appendChild(buildGauge(pace));
+  // Gauge — start at 0 (needle points left), animate to pace on visible
+  const { svg, arc, needleG } = buildGauge(0);
+  wrap.appendChild(svg);
 
   // Zone label
   const lbl = document.createElement('p');
@@ -269,49 +308,63 @@ function initOne(ul) {
   lbl.style.color = zone.color;
   wrap.appendChild(lbl);
 
-  // Sub-label
+  // Sub
   const sub = document.createElement('p');
   sub.className = 'trl-pace-sub';
-  const pct = Math.round(actualFrac * 100);
-  sub.textContent = pagesVisited === 0
+  const pct = Math.round((pagesUsed / totalPages) * 100);
+  sub.textContent = pagesUsed === 0
     ? 'Visit course pages to begin tracking'
-    : pct + '% complete';
+    : pct + '% complete' + (metric === 'completed' ? ' (deep reads)' : '');
   wrap.appendChild(sub);
 
-  // Stats rows
+  // Stats
   const stats = document.createElement('div');
   stats.className = 'trl-pace-stats';
 
-  function row(label, value) {
-    const r = document.createElement('div');
-    r.className = 'trl-pace-row';
+  function row(label, value, dim) {
+    const r = document.createElement('div'); r.className = 'trl-pace-row';
     const l = document.createElement('span'); l.className = 'trl-pace-row-label'; l.textContent = label;
-    const v = document.createElement('span'); v.className = 'trl-pace-row-value'; v.textContent = value;
-    r.appendChild(l); r.appendChild(v);
-    stats.appendChild(r);
+    const v = document.createElement('span'); v.className = 'trl-pace-row-value' + (dim ? ' trl-pace-dim' : ''); v.textContent = value;
+    r.appendChild(l); r.appendChild(v); stats.appendChild(r);
   }
 
-  row('Pages visited', pagesVisited + ' of ' + totalPages);
-  row('Projected finish', projectedDate ? fmt(projectedDate) : '—');
+  row('Pages visited',   visited   + ' of ' + totalPages, metric !== 'visited');
+  row('Pages counted',   counted   + ' of ' + totalPages, metric !== 'counted');
+  row('Pages completed', completed + ' of ' + totalPages, metric !== 'completed');
+
+  if (projectedDate) row('Projected finish', fmt(projectedDate));
   row('Course ends', fmt(endDate));
 
-  // On/off track pill
   if (targetDate && projectedDate) {
     const diff = Math.round((targetDate - projectedDate) / 86400000);
     const yes  = diff >= 0;
     const pill = document.createElement('div');
     pill.className = 'trl-pace-track-pill ' + (yes ? 'trl-pace-track-yes' : 'trl-pace-track-no');
-    const icon = yes ? '✓' : '✗';
     const days = Math.abs(diff);
-    pill.textContent = yes
-      ? icon + ' ' + days + ' day' + (days !== 1 ? 's' : '') + ' before your target'
-      : icon + ' ' + days + ' day' + (days !== 1 ? 's' : '') + ' after your target';
+    pill.textContent = (yes ? '✓ ' : '✗ ') + days + ' day' + (days !== 1 ? 's' : '')
+      + (yes ? ' before' : ' after') + ' your target';
     stats.appendChild(pill);
   }
 
   wrap.appendChild(stats);
   ul.replaceWith(wrap);
-  onVisible(wrap, () => wrap.classList.add('trl-pace-in'));
+
+  // Animate arc + needle in when visible
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  onVisible(wrap, () => {
+    wrap.classList.add('trl-pace-in');
+    if (!reduced) {
+      const targetOffset = CIRC - Math.min(SEMI, Math.max(0, (pace / 2) * SEMI));
+      arc.style.strokeDashoffset = targetOffset.toFixed(2);
+      arc.style.stroke = zone.color;
+      // Needle rotates clockwise from 0° (left=pace 0) by pace×90°
+      needleG.style.transform = 'rotate(' + Math.min(180, pace * 90).toFixed(1) + 'deg)';
+    } else {
+      arc.style.strokeDashoffset = (CIRC - Math.min(SEMI, Math.max(0, (pace / 2) * SEMI))).toFixed(2);
+      arc.style.stroke = zone.color;
+      needleG.style.transform = 'rotate(' + Math.min(180, pace * 90).toFixed(1) + 'deg)';
+    }
+  });
 }
 
 // ── Identify ─────────────────────────────────────────────────────────────────
