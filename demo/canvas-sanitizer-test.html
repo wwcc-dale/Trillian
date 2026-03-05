@@ -1,0 +1,267 @@
+<!-- =====================================================================
+     TRILLIAN — Canvas Sanitizer Test
+     Paste everything below this comment into Canvas's HTML editor,
+     save the page, then re-open the HTML editor to see what survived.
+     Items marked ⚠ are expected to be stripped or modified by Canvas.
+     ===================================================================== -->
+
+<style>
+  .trl-test-page { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 860px; color: #333; }
+  .trl-test-h1 { font-size: 18px; font-weight: 800; border-bottom: 2px solid #333; padding-bottom: 6px; margin: 0 0 8px; }
+  .trl-test-note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px 14px; font-size: 13px; margin-bottom: 24px; }
+  .trl-test-section { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #888; margin: 32px 0 8px; padding-bottom: 5px; border-bottom: 1px solid #eee; }
+  .trl-test-row { display: flex; gap: 10px; margin: 4px 0; align-items: baseline; font-size: 14px; }
+  .trl-test-lbl { min-width: 180px; font-size: 11px; color: #aaa; flex-shrink: 0; padding-top: 2px; }
+</style>
+
+<div class="trl-test-page">
+
+<p class="trl-test-h1">Canvas Sanitizer Test</p>
+<div class="trl-test-note">Paste this into a Canvas page via <strong>View &gt; HTML Editor</strong>, save, then re-open the editor. Anything stripped or changed is a Canvas constraint. Items marked <strong>⚠</strong> are expected casualties.</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TEXT-LEVEL ELEMENTS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Text-level elements</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;strong&gt;</span> <strong>Bold text</strong></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;em&gt;</span> <em>Italic text</em></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;b&gt;</span> <b>Bold (b)</b></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;i&gt;</span> <i>Italic (i)</i></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;u&gt;</span> <u>Underline</u></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;s&gt;</span> <s>Strikethrough</s></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;del&gt;</span> <del>Deleted text</del></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;ins&gt;</span> <ins>Inserted text</ins></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;mark&gt;</span> <mark>Highlighted</mark></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;code&gt;</span> <code>inline code</code></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;kbd&gt;</span> <kbd>Ctrl+S</kbd></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;samp&gt;</span> <samp>sample output</samp></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;var&gt;</span> <var>variable</var></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;abbr title=&gt;</span> <abbr title="HyperText Markup Language">HTML</abbr></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;cite&gt;</span> <cite>Book title</cite></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;q&gt;</span> <q>Inline quote</q></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;sub&gt;</span> H<sub>2</sub>O</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;sup&gt;</span> E=mc<sup>2</sup></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;small&gt;</span> <small>Small print</small></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;span&gt;</span> <span>Generic span</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;br&gt;</span> Line one<br>Line two</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;wbr&gt;</span> Verylong<wbr>wordhere</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;time datetime=&gt;</span> <time datetime="2026-03-05">March 5, 2026</time></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;dfn&gt;</span> <dfn>Defined term</dfn></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;rp&gt; &lt;ruby&gt; &lt;rt&gt;</span> <ruby>漢字<rp>(</rp><rt>かんじ</rt><rp>)</rp></ruby></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     LINKS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Links &amp; anchors</p>
+<div class="trl-test-row"><span class="trl-test-lbl">href (external)</span> <a href="https://example.com">External link</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">href (fragment)</span> <a href="#section">Fragment #section</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">href="#pill:warning" ⚠</span> <a href="#pill:warning">Fragment with colon</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">target="_blank"</span> <a href="https://example.com" target="_blank">Opens new tab</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">rel="noopener"</span> <a href="https://example.com" rel="noopener noreferrer">rel=noopener</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">href="mailto:"</span> <a href="mailto:test@example.com">Email link</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">href="tel:"</span> <a href="tel:+15555555555">Phone link</a></div>
+<div class="trl-test-row"><span class="trl-test-lbl">id= (anchor target)</span> <span id="section">Span with id="section"</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">name= on &lt;a&gt; ⚠</span> <a name="oldstyle">Named anchor</a></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOCK ELEMENTS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Block elements</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;p&gt;</span> <p style="margin:0">Paragraph text</p></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;div&gt;</span> <div>Generic div</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;section&gt; ⚠</span> <section>Section element</section></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;article&gt; ⚠</span> <article>Article element</article></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;aside&gt; ⚠</span> <aside>Aside element</aside></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;header&gt; ⚠</span> <header>Header element</header></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;footer&gt; ⚠</span> <footer>Footer element</footer></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;nav&gt; ⚠</span> <nav>Nav element</nav></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;main&gt; ⚠</span> <main>Main element</main></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;figure&gt; &lt;figcaption&gt;</span> <figure style="margin:0"><figcaption>Caption</figcaption></figure></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;details&gt; &lt;summary&gt; ⚠</span> <details><summary>Click to expand</summary>Hidden content revealed</details></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;blockquote&gt;</span> <blockquote style="margin:0;padding-left:12px;border-left:3px solid #ccc">Blockquote</blockquote></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;pre&gt;</span> <pre style="margin:0">Preformatted  text</pre></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;hr&gt;</span> <hr style="margin:4px 0"></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;dialog&gt; ⚠</span> <dialog open>Dialog content</dialog></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     HEADINGS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Headings</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h1&gt;</span> <h1 style="margin:0">Heading 1</h1></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h2&gt;</span> <h2 style="margin:0">Heading 2</h2></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h3&gt;</span> <h3 style="margin:0">Heading 3</h3></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h4&gt;</span> <h4 style="margin:0">Heading 4</h4></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h5&gt;</span> <h5 style="margin:0">Heading 5</h5></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;h6&gt;</span> <h6 style="margin:0">Heading 6</h6></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     LISTS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Lists</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;ul&gt; &lt;li&gt;</span> <ul style="margin:0;padding-left:20px"><li>Item one</li><li>Item two</li></ul></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;ol&gt; &lt;li&gt;</span> <ol style="margin:0;padding-left:20px"><li>First</li><li>Second</li></ol></div>
+<div class="trl-test-row"><span class="trl-test-lbl">ol type="A"</span> <ol type="A" style="margin:0;padding-left:20px"><li>Alpha</li><li>Beta</li></ol></div>
+<div class="trl-test-row"><span class="trl-test-lbl">ol start="5"</span> <ol start="5" style="margin:0;padding-left:20px"><li>Five</li><li>Six</li></ol></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;dl&gt; &lt;dt&gt; &lt;dd&gt;</span> <dl style="margin:0"><dt>Term</dt><dd>Definition</dd></dl></div>
+<div class="trl-test-row"><span class="trl-test-lbl">nested &lt;ul&gt;</span> <ul style="margin:0;padding-left:20px"><li>Parent<ul><li>Child</li></ul></li></ul></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TABLES
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Tables</p>
+<table border="1" cellpadding="4" style="border-collapse:collapse;margin-bottom:8px">
+  <caption>Table caption</caption>
+  <thead><tr><th scope="col">Header A</th><th scope="col">Header B</th></tr></thead>
+  <tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>
+  <tfoot><tr><td colspan="2">Footer (colspan=2)</td></tr></tfoot>
+</table>
+<table border="1" cellpadding="4" style="border-collapse:collapse">
+  <tr><td rowspan="2">rowspan=2</td><td>R1C2</td></tr>
+  <tr><td>R2C2</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SVG
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">SVG</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;svg&gt; inline</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="60" height="28" viewBox="0 0 60 28">
+    <rect width="60" height="28" rx="5" fill="#4a90d9"/>
+    <text x="30" y="19" font-size="11" fill="white" text-anchor="middle">SVG</text>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;path&gt;</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;circle&gt; &lt;rect&gt;</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="56" height="28">
+    <circle cx="14" cy="14" r="12" fill="#22c55e"/>
+    <rect x="30" y="2" width="24" height="24" rx="4" fill="#f59e0b"/>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;polygon&gt;</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7b68ee" stroke-width="1.5">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;defs&gt; &lt;use&gt; ⚠</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="56" height="28">
+    <defs><circle id="trl-test-dot" r="10" fill="#7b68ee"/></defs>
+    <use href="#trl-test-dot" x="14" y="14"/>
+    <use href="#trl-test-dot" x="42" y="14"/>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">aria-hidden on svg</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
+  </svg>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">stroke-dasharray</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="60" height="28" viewBox="0 0 60 28">
+    <circle cx="30" cy="14" r="11" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="20 8" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     MEDIA
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Media</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;img&gt; src alt width height</span>
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Crect width='40' height='20' fill='%234a90d9'/%3E%3C/svg%3E" alt="Test image" width="40" height="20">
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">img data-src ⚠</span>
+  <img data-src="lazy.jpg" alt="Lazy image" width="40" height="20">
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;iframe&gt; ⚠</span>
+  <iframe src="https://example.com" width="200" height="60" title="Iframe test"></iframe>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;audio&gt; ⚠</span>
+  <audio controls><source src="test.mp3" type="audio/mpeg">Audio not supported.</audio>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;video&gt; ⚠</span>
+  <video controls width="200" height="80"><source src="test.mp4" type="video/mp4">Video not supported.</video>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     INLINE STYLE — CSS PROPERTIES
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Inline style="" — CSS properties</p>
+<div class="trl-test-row"><span class="trl-test-lbl">color</span> <span style="color:#e8a838">colored text</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">background</span> <span style="background:#eff6ff;padding:2px 8px">background</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">background-color</span> <span style="background-color:#fef2f2;padding:2px 8px">background-color</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">font-size</span> <span style="font-size:20px">large text</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">font-weight</span> <span style="font-weight:800">heavy weight</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">font-family</span> <span style="font-family:Georgia,serif">serif font</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">font-style</span> <span style="font-style:italic">italic via style</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">text-align</span> <div style="text-align:center;background:#f4f4f4;padding:3px">centered</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">text-decoration</span> <span style="text-decoration:underline wavy red">wavy underline</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">text-transform</span> <span style="text-transform:uppercase">uppercase</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">letter-spacing ⚠</span> <span style="letter-spacing:0.12em">letter spaced</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">line-height</span> <div style="line-height:2.2;background:#f4f4f4;padding:2px 6px">double<br>spaced</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">padding</span> <span style="padding:6px 14px;background:#f0fdf4">padded</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">margin</span> <div style="margin:10px 0;background:#f4f4f4;padding:3px 6px">has margin</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">border</span> <span style="border:2px solid #4a90d9;padding:2px 8px">bordered</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">border-radius</span> <span style="border-radius:99px;border:2px solid #4a90d9;padding:2px 12px">rounded</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">border-left</span> <div style="border-left:4px solid #f59e0b;padding-left:10px">left border</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">width + height</span> <div style="width:60px;height:18px;background:#7b68ee"></div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">max-width</span> <div style="max-width:100px;background:#f4f4f4;padding:3px 6px">max-width 100px</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">display:flex</span> <div style="display:flex;gap:8px"><span style="background:#4a90d9;color:#fff;padding:2px 8px">A</span><span style="background:#4a90d9;color:#fff;padding:2px 8px">B</span></div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">display:grid</span> <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;max-width:120px"><div style="background:#e8e8e8;padding:4px">1</div><div style="background:#e8e8e8;padding:4px">2</div></div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">position:relative</span> <div style="position:relative;height:28px;background:#f4f4f4;width:120px"><span style="position:absolute;right:4px;top:6px;font-size:12px">abs child</span></div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">overflow:hidden</span> <div style="overflow:hidden;width:80px;height:20px;background:#f4f4f4">long content that should clip</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">opacity ⚠</span> <span style="opacity:0.3">faded text</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">box-shadow ⚠</span> <span style="box-shadow:0 2px 8px rgba(0,0,0,0.25);padding:3px 10px;display:inline-block">shadow</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">transform ⚠</span> <span style="transform:rotate(8deg);display:inline-block">rotated</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">--custom-prop ⚠</span> <div style="--trl-test-clr:red;color:var(--trl-test-clr)">CSS custom property</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">pointer-events ⚠</span> <span style="pointer-events:none">pointer-events:none</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">cursor</span> <span style="cursor:pointer">cursor:pointer (hover me)</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">z-index</span> <div style="position:relative;z-index:5;background:#f4f4f4;padding:3px 6px;display:inline-block">z-index:5</div></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     HTML ATTRIBUTES
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">HTML attributes</p>
+<div class="trl-test-row"><span class="trl-test-lbl">class=</span> <span class="trl-test-custom-class">has class attribute</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">id=</span> <div id="trl-test-id-target">has id attribute</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">data-* ⚠</span> <div data-value="42" data-label="test">has data-value and data-label</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">aria-label</span> <div aria-label="test label">aria-label="test label"</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">aria-hidden</span> <div aria-hidden="true">aria-hidden="true"</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">role=</span> <div role="note">role="note"</div></div>
+<div class="trl-test-row"><span class="trl-test-lbl">tabindex=</span> <span tabindex="0">tabindex="0"</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">title=</span> <span title="Tooltip text">has title (hover me)</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">lang=</span> <span lang="fr">Bonjour (lang="fr")</span></div>
+<div class="trl-test-row"><span class="trl-test-lbl">dir=</span> <span dir="rtl">RTL text (dir="rtl")</span></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FORM ELEMENTS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Form elements</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;button&gt; ⚠</span> <button type="button">Button element</button></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;input type=text&gt; ⚠</span> <input type="text" value="test value" readonly></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;input type=checkbox&gt; ⚠</span> <input type="checkbox" checked readonly> checked &nbsp; <input type="checkbox" readonly> unchecked</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;meter&gt; ⚠</span> <meter value="0.7">70%</meter></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;progress&gt; ⚠</span> <progress value="70" max="100">70%</progress></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SCRIPT AND STYLE TAGS
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Script &amp; style in page content ⚠</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;style&gt; in content</span>
+  <style>.trl-test-injected { color: #22c55e; font-weight: 700; }</style>
+  <span class="trl-test-injected">Styled by injected &lt;style&gt; (green = survived)</span>
+</div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;script&gt; in content ⚠</span>
+  <script>try { document.currentScript.previousElementSibling && (document.currentScript.previousElementSibling.querySelector && void 0); var trlTestEl = document.getElementById('trl-test-script-result'); if(trlTestEl) trlTestEl.textContent = 'JS ran ✓'; } catch(e){}</script>
+  <span id="trl-test-script-result">JS did not run</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CUSTOM ELEMENTS (expected to be stripped)
+════════════════════════════════════════════════════════════════════ -->
+<p class="trl-test-section">Custom elements ⚠ (expected stripped)</p>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;my-widget&gt;</span> <my-widget>Content of my-widget</my-widget></div>
+<div class="trl-test-row"><span class="trl-test-lbl">&lt;x-badge&gt;</span> <x-badge>Content of x-badge</x-badge></div>
+
+</div>

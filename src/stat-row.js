@@ -35,8 +35,8 @@ function resolveColor(raw) {
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('ts-styles', `
-    .ts-row {
+  injectOnce('trl-stat-styles', `
+    .trl-stat-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
@@ -44,8 +44,8 @@ function injectStyles() {
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .ts-row.ts-in { opacity: 1; }
-    .ts-card {
+    .trl-stat-row.trl-stat-in { opacity: 1; }
+    .trl-stat-card {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -54,21 +54,21 @@ function injectStyles() {
       min-width: 80px;
       background: #fff;
       border-radius: 14px;
-      border-top: 4px solid var(--ts-color);
+      border-top: 4px solid var(--trl-stat-color);
       padding: 16px 14px 14px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.07);
       box-sizing: border-box;
       text-align: center;
     }
-    .ts-value {
+    .trl-stat-value {
       font-size: 32px;
       font-weight: 800;
       line-height: 1;
-      color: var(--ts-color);
+      color: var(--trl-stat-color);
       letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
     }
-    .ts-label {
+    .trl-stat-label {
       font-size: 12px;
       font-weight: 500;
       color: #aaa;
@@ -76,7 +76,7 @@ function injectStyles() {
       line-height: 1.3;
     }
     @media (prefers-reduced-motion: reduce) {
-      .ts-row { transition: none; opacity: 1; }
+      .trl-stat-row { transition: none; opacity: 1; }
     }
   `);
 }
@@ -137,19 +137,19 @@ function initOne(ul) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const row = document.createElement('div');
-  row.className = 'ts-row';
+  row.className = 'trl-stat-row';
 
   const animTargets = [];
 
   items.forEach((item, i) => {
     const card = document.createElement('div');
-    card.className = 'ts-card';
-    card.style.setProperty('--ts-color', item.color);
+    card.className = 'trl-stat-card';
+    card.style.setProperty('--trl-stat-color', item.color);
 
     const valEl = document.createElement('div');
-    valEl.className = 'ts-value';
+    valEl.className = 'trl-stat-value';
     const lblEl = document.createElement('div');
-    lblEl.className = 'ts-label';
+    lblEl.className = 'trl-stat-label';
     lblEl.textContent = item.label;
 
     const parsed = parseValue(item.value);
@@ -169,7 +169,7 @@ function initOne(ul) {
 
   onVisible(row, reduced => {
     if (!reduced) animTargets.forEach(({ el, parsed, delay }) => animateCount(el, parsed, delay));
-    row.classList.add('ts-in');
+    row.classList.add('trl-stat-in');
   }, 0.25);
 }
 

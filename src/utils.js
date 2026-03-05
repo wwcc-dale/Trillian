@@ -44,12 +44,54 @@ export function nestedContent(li) {
 
 // ── Style injection ───────────────────────────────────────────────────────
 
-/** Inject a shared <style> block exactly once, guarded by id. */
+/**
+ * Scope all CSS rules to `scope` (default: `.trillian`).
+ * @keyframes names are left global (CSS can't scope keyframe names).
+ * @media / other at-rules pass through; their inner rules are scoped.
+ * Nested @keyframes inside @media are also left unscoped.
+ */
+export function scopeCSS(css, scope = '.trillian') {
+  let depth = 0;
+  let inKeyframes = false;
+  let keyframesDepth = -1;
+
+  return css.replace(/([^{}]*)([\{\}])/g, (_, content, brace) => {
+    if (brace === '}') {
+      if (inKeyframes && depth === keyframesDepth) {
+        inKeyframes = false;
+        keyframesDepth = -1;
+      }
+      depth--;
+      return content + '}';
+    }
+    // Opening brace
+    depth++;
+    const selector = content.trim();
+    if (!selector) return content + '{';
+    if (/^@keyframes\s/i.test(selector)) {
+      inKeyframes = true;
+      keyframesDepth = depth;
+      return content + '{';
+    }
+    // Inside @keyframes: frame selectors (from/to/0%/100% etc.) — don't scope
+    if (inKeyframes) return content + '{';
+    // Other at-rules (@media, @supports, etc.) — pass through as-is
+    if (selector.startsWith('@')) return content + '{';
+    // Regular selectors — prefix each comma-separated part with scope
+    const scoped = selector
+      .split(',')
+      .map(s => `${scope} ${s.trim()}`)
+      .join(', ');
+    return scoped + ' {';
+  });
+}
+
+/** Inject a scoped <style> block exactly once, guarded by id. */
 export function injectOnce(id, css) {
   if (document.getElementById(id)) return;
   const s = document.createElement('style');
   s.id = id;
-  s.textContent = css;
+  s.textContent = scopeCSS(css);
   document.head.appendChild(s);
 }
 

@@ -4,9 +4,10 @@ import { readdirSync, writeFileSync, mkdirSync } from 'fs';
 const watching = process.argv.includes('--watch');
 const banner   = '/* Trillian — Canvas LMS component library | github.com/wwcc-dale/trillian */';
 
-// Individual component source files (exclude index.js and utils.js)
+// Individual component source files (exclude shared library files)
+const SHARED = new Set(['index.js', 'utils.js', 'icons.js']);
 const componentEntries = readdirSync('./src')
-  .filter(f => f.endsWith('.js') && f !== 'index.js' && f !== 'utils.js')
+  .filter(f => f.endsWith('.js') && !SHARED.has(f))
   .map(f => `src/${f}`);
 
 mkdirSync('dist', { recursive: true });

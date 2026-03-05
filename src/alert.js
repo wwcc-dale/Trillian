@@ -27,31 +27,31 @@ const ICONS = {
 };
 
 function injectStyles() {
-  injectOnce('ta-styles', `
-    .ta-callout {
+  injectOnce('trl-alert-styles', `
+    .trl-alert-callout {
       display: flex;
       gap: 12px;
       padding: 14px 16px;
       border-radius: 10px;
-      border-left: 4px solid var(--ta-border);
-      background: var(--ta-bg);
+      border-left: 4px solid var(--trl-alert-border);
+      background: var(--trl-alert-bg);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 14px;
       line-height: 1.65;
-      color: var(--ta-text);
+      color: var(--trl-alert-text);
       box-sizing: border-box;
       margin: 8px 0;
       opacity: 0;
       transition: opacity 0.35s ease;
     }
-    .ta-callout.ta-in { opacity: 1; }
-    .ta-icon-wrap { flex-shrink: 0; color: var(--ta-icon); padding-top: 1px; }
-    .ta-body { flex: 1; min-width: 0; }
-    .ta-body p { margin: 0; }
-    .ta-body p + p { margin-top: 5px; }
-    .ta-body a { color: var(--ta-icon); }
+    .trl-alert-callout.trl-alert-in { opacity: 1; }
+    .trl-alert-icon-wrap { flex-shrink: 0; color: var(--trl-alert-icon); padding-top: 1px; }
+    .trl-alert-body { flex: 1; min-width: 0; }
+    .trl-alert-body p { margin: 0; }
+    .trl-alert-body p + p { margin-top: 5px; }
+    .trl-alert-body a { color: var(--trl-alert-icon); }
     @media (prefers-reduced-motion: reduce) {
-      .ta-callout { transition: none; opacity: 1; }
+      .trl-alert-callout { transition: none; opacity: 1; }
     }
   `);
 }
@@ -87,19 +87,19 @@ function initOne(bq) {
   const { type, bodyHtml } = parsed;
   const theme = THEMES[type];
   const wrap = document.createElement('div');
-  wrap.className = 'ta-callout';
+  wrap.className = 'trl-alert-callout';
   wrap.setAttribute('role', 'note');
   wrap.setAttribute('aria-label', theme.label);
-  wrap.style.setProperty('--ta-bg',     theme.bg);
-  wrap.style.setProperty('--ta-border', theme.border);
-  wrap.style.setProperty('--ta-text',   theme.text);
-  wrap.style.setProperty('--ta-icon',   theme.icon);
+  wrap.style.setProperty('--trl-alert-bg',     theme.bg);
+  wrap.style.setProperty('--trl-alert-border', theme.border);
+  wrap.style.setProperty('--trl-alert-text',   theme.text);
+  wrap.style.setProperty('--trl-alert-icon',   theme.icon);
   wrap.innerHTML = `
-    <span class="ta-icon-wrap">${ICONS[type]}</span>
-    <div class="ta-body">${bodyHtml}</div>
+    <span class="trl-alert-icon-wrap">${ICONS[type]}</span>
+    <div class="trl-alert-body">${bodyHtml}</div>
   `;
   bq.replaceWith(wrap);
-  onVisible(wrap, () => wrap.classList.add('ta-in'));
+  onVisible(wrap, () => wrap.classList.add('trl-alert-in'));
 }
 
 function initAll() {

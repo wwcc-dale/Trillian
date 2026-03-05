@@ -22,8 +22,8 @@ const CHEVRON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" ari
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('tac-styles', `
-    .tac-widget {
+  injectOnce('trl-acc-styles', `
+    .trl-acc-widget {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #fff;
       border-radius: 16px;
@@ -34,8 +34,8 @@ function injectStyles() {
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .tac-widget.tac-in { opacity: 1; }
-    .tac-label {
+    .trl-acc-widget.trl-acc-in { opacity: 1; }
+    .trl-acc-label {
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -44,9 +44,9 @@ function injectStyles() {
       padding: 18px 20px 0;
       margin: 0;
     }
-    .tac-item { border-bottom: 1px solid #f0f0f0; }
-    .tac-item:last-child { border-bottom: none; }
-    .tac-trigger {
+    .trl-acc-item { border-bottom: 1px solid #f0f0f0; }
+    .trl-acc-item:last-child { border-bottom: none; }
+    .trl-acc-trigger {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -63,30 +63,30 @@ function injectStyles() {
       text-align: left;
       transition: background 0.15s;
     }
-    .tac-trigger:hover { background: #fafafa; }
-    .tac-trigger:focus-visible { outline: 2px solid var(--tac-accent); outline-offset: -2px; }
-    .tac-chevron {
+    .trl-acc-trigger:hover { background: #fafafa; }
+    .trl-acc-trigger:focus-visible { outline: 2px solid var(--trl-acc-accent); outline-offset: -2px; }
+    .trl-acc-chevron {
       flex-shrink: 0;
       color: #aaa;
       transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .tac-trigger[aria-expanded="true"] .tac-chevron { transform: rotate(180deg); }
-    .tac-panel {
+    .trl-acc-trigger[aria-expanded="true"] .trl-acc-chevron { transform: rotate(180deg); }
+    .trl-acc-panel {
       overflow: hidden;
       height: 0;
       transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .tac-panel-inner {
+    .trl-acc-panel-inner {
       padding: 4px 20px 18px;
       font-size: 14px;
       line-height: 1.65;
       color: #555;
     }
-    .tac-panel-inner p { margin: 0; }
-    .tac-panel-inner p + p { margin-top: 8px; }
+    .trl-acc-panel-inner p { margin: 0; }
+    .trl-acc-panel-inner p + p { margin-top: 8px; }
     @media (prefers-reduced-motion: reduce) {
-      .tac-widget { transition: none; opacity: 1; }
-      .tac-panel, .tac-chevron { transition: none; }
+      .trl-acc-widget { transition: none; opacity: 1; }
+      .trl-acc-panel, .trl-acc-chevron { transition: none; }
     }
   `);
 }
@@ -137,39 +137,39 @@ function initOne(ul) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const wrap = document.createElement('div');
-  wrap.className = 'tac-widget';
-  wrap.style.setProperty('--tac-accent', '#4a90d9');
+  wrap.className = 'trl-acc-widget';
+  wrap.style.setProperty('--trl-acc-accent', '#4a90d9');
 
   if (label) {
     const lbl = document.createElement('p');
-    lbl.className = 'tac-label';
+    lbl.className = 'trl-acc-label';
     lbl.textContent = label;
     wrap.appendChild(lbl);
   }
 
   items.forEach((item, i) => {
-    const panelId   = `tac-panel-${i}-${Math.random().toString(36).slice(2, 7)}`;
-    const triggerId = `tac-btn-${i}-${Math.random().toString(36).slice(2, 7)}`;
+    const panelId   = `trl-acc-panel-${i}-${Math.random().toString(36).slice(2, 7)}`;
+    const triggerId = `trl-acc-btn-${i}-${Math.random().toString(36).slice(2, 7)}`;
 
     const div = document.createElement('div');
-    div.className = 'tac-item';
+    div.className = 'trl-acc-item';
 
     const btn = document.createElement('button');
-    btn.className = 'tac-trigger';
+    btn.className = 'trl-acc-trigger';
     btn.id = triggerId;
     btn.setAttribute('aria-expanded', 'false');
     btn.setAttribute('aria-controls', panelId);
-    btn.innerHTML = `<span>${item.heading}</span><span class="tac-chevron">${CHEVRON}</span>`;
+    btn.innerHTML = `<span>${item.heading}</span><span class="trl-acc-chevron">${CHEVRON}</span>`;
 
     const panel = document.createElement('div');
-    panel.className = 'tac-panel';
+    panel.className = 'trl-acc-panel';
     panel.id = panelId;
     panel.setAttribute('role', 'region');
     panel.setAttribute('aria-labelledby', triggerId);
     panel.style.height = '0';
 
     const inner = document.createElement('div');
-    inner.className = 'tac-panel-inner';
+    inner.className = 'trl-acc-panel-inner';
     inner.innerHTML = item.paras.length ? item.paras.map(p => `<p>${p}</p>`).join('') : '<p></p>';
     panel.appendChild(inner);
 
@@ -186,7 +186,7 @@ function initOne(ul) {
   });
 
   ul.replaceWith(wrap);
-  onVisible(wrap, () => wrap.classList.add('tac-in'));
+  onVisible(wrap, () => wrap.classList.add('trl-acc-in'));
 }
 
 function initAll() {

@@ -19,8 +19,8 @@ const MARKER = 'tabs';
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('tt-styles', `
-    .tt-widget {
+  injectOnce('trl-tabs-styles', `
+    .trl-tabs-widget {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #fff;
       border-radius: 16px;
@@ -31,16 +31,16 @@ function injectStyles() {
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .tt-widget.tt-in { opacity: 1; }
-    .tt-tablist {
+    .trl-tabs-widget.trl-tabs-in { opacity: 1; }
+    .trl-tabs-tablist {
       display: flex;
       gap: 0;
       border-bottom: 1px solid #f0f0f0;
       overflow-x: auto;
       scrollbar-width: none;
     }
-    .tt-tablist::-webkit-scrollbar { display: none; }
-    .tt-tab {
+    .trl-tabs-tablist::-webkit-scrollbar { display: none; }
+    .trl-tabs-tab {
       flex-shrink: 0;
       padding: 14px 20px;
       background: none;
@@ -55,28 +55,28 @@ function injectStyles() {
       transition: color 0.2s, border-color 0.2s;
       white-space: nowrap;
     }
-    .tt-tab:hover { color: #555; }
-    .tt-tab:focus-visible { outline: 2px solid var(--tt-accent); outline-offset: -2px; }
-    .tt-tab[aria-selected="true"] {
-      color: var(--tt-accent);
-      border-bottom-color: var(--tt-accent);
+    .trl-tabs-tab:hover { color: #555; }
+    .trl-tabs-tab:focus-visible { outline: 2px solid var(--trl-tabs-accent); outline-offset: -2px; }
+    .trl-tabs-tab[aria-selected="true"] {
+      color: var(--trl-tabs-accent);
+      border-bottom-color: var(--trl-tabs-accent);
     }
-    .tt-panels { padding: 20px; }
-    .tt-panel {
+    .trl-tabs-panels { padding: 20px; }
+    .trl-tabs-panel {
       display: none;
       font-size: 14px;
       line-height: 1.65;
       color: #444;
-      animation: tt-fade 0.2s ease;
+      animation: trl-tabs-fade 0.2s ease;
     }
-    .tt-panel.tt-active { display: block; }
-    @keyframes tt-fade { from { opacity: 0; } to { opacity: 1; } }
-    .tt-panel p { margin: 0; }
-    .tt-panel p + p { margin-top: 8px; }
+    .trl-tabs-panel.trl-tabs-active { display: block; }
+    @keyframes trl-tabs-fade { from { opacity: 0; } to { opacity: 1; } }
+    .trl-tabs-panel p { margin: 0; }
+    .trl-tabs-panel p + p { margin-top: 8px; }
     @media (prefers-reduced-motion: reduce) {
-      .tt-widget { transition: none; opacity: 1; }
-      .tt-tab { transition: none; }
-      @keyframes tt-fade { from { opacity: 1; } }
+      .trl-tabs-widget { transition: none; opacity: 1; }
+      .trl-tabs-tab { transition: none; }
+      @keyframes trl-tabs-fade { from { opacity: 1; } }
     }
   `);
 }
@@ -105,25 +105,25 @@ function initOne(ul) {
   const uid = Math.random().toString(36).slice(2, 7);
 
   const wrap = document.createElement('div');
-  wrap.className = 'tt-widget';
-  wrap.style.setProperty('--tt-accent', '#4a90d9');
+  wrap.className = 'trl-tabs-widget';
+  wrap.style.setProperty('--trl-tabs-accent', '#4a90d9');
 
   const tablist = document.createElement('div');
-  tablist.className = 'tt-tablist';
+  tablist.className = 'trl-tabs-tablist';
   tablist.setAttribute('role', 'tablist');
 
   const panelsEl = document.createElement('div');
-  panelsEl.className = 'tt-panels';
+  panelsEl.className = 'trl-tabs-panels';
 
   const tabEls   = [];
   const panelEls = [];
 
   tabData.forEach((tab, i) => {
-    const tabId   = `tt-tab-${uid}-${i}`;
-    const panelId = `tt-panel-${uid}-${i}`;
+    const tabId   = `trl-tabs-tab-${uid}-${i}`;
+    const panelId = `trl-tabs-panel-${uid}-${i}`;
 
     const btn = document.createElement('button');
-    btn.className = 'tt-tab';
+    btn.className = 'trl-tabs-tab';
     btn.id = tabId;
     btn.setAttribute('role', 'tab');
     btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
@@ -132,7 +132,7 @@ function initOne(ul) {
     btn.textContent = tab.label;
 
     const panel = document.createElement('div');
-    panel.className = 'tt-panel' + (i === 0 ? ' tt-active' : '');
+    panel.className = 'trl-tabs-panel' + (i === 0 ? ' trl-tabs-active' : '');
     panel.id = panelId;
     panel.setAttribute('role', 'tabpanel');
     panel.setAttribute('aria-labelledby', tabId);
@@ -153,7 +153,7 @@ function initOne(ul) {
       tab.setAttribute('tabindex', active ? '0' : '-1');
     });
     panelEls.forEach((panel, i) => {
-      panel.classList.toggle('tt-active', i === idx);
+      panel.classList.toggle('trl-tabs-active', i === idx);
     });
   }
 
@@ -175,7 +175,7 @@ function initOne(ul) {
   wrap.appendChild(tablist);
   wrap.appendChild(panelsEl);
   ul.replaceWith(wrap);
-  onVisible(wrap, () => wrap.classList.add('tt-in'));
+  onVisible(wrap, () => wrap.classList.add('trl-tabs-in'));
 }
 
 function initAll() {

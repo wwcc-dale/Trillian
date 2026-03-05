@@ -53,8 +53,8 @@ function parseList(ul) {
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('tc-styles', `
-    .tc-widget {
+  injectOnce('trl-check-styles', `
+    .trl-check-widget {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #fff;
       border-radius: 16px;
@@ -65,14 +65,14 @@ function injectStyles() {
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .tc-widget.tc-in { opacity: 1; }
-    .tc-header {
+    .trl-check-widget.trl-check-in { opacity: 1; }
+    .trl-check-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
     }
-    .tc-title {
+    .trl-check-title {
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -80,23 +80,23 @@ function injectStyles() {
       color: #aaa;
       margin: 0;
     }
-    .tc-count { font-size: 12px; color: #bbb; }
-    .tc-bar {
+    .trl-check-count { font-size: 12px; color: #bbb; }
+    .trl-check-bar {
       height: 4px;
       background: #eee;
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 18px;
     }
-    .tc-bar-fill {
+    .trl-check-bar-fill {
       height: 100%;
-      background: var(--tc-accent);
+      background: var(--trl-check-accent);
       border-radius: 2px;
       width: 0%;
       transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .tc-list { list-style: none; margin: 0; padding: 0; }
-    .tc-item {
+    .trl-check-list { list-style: none; margin: 0; padding: 0; }
+    .trl-check-item {
       display: flex;
       align-items: flex-start;
       gap: 11px;
@@ -105,8 +105,8 @@ function injectStyles() {
       cursor: pointer;
       transition: background 0.15s;
     }
-    .tc-item:hover { background: #f7f7f7; }
-    .tc-cb {
+    .trl-check-item:hover { background: #f7f7f7; }
+    .trl-check-cb {
       appearance: none;
       -webkit-appearance: none;
       width: 18px;
@@ -120,11 +120,11 @@ function injectStyles() {
       background: #fff;
       transition: background 0.15s, border-color 0.15s;
     }
-    .tc-cb:checked {
-      background: var(--tc-accent);
-      border-color: var(--tc-accent);
+    .trl-check-cb:checked {
+      background: var(--trl-check-accent);
+      border-color: var(--trl-check-accent);
     }
-    .tc-cb:checked::after {
+    .trl-check-cb:checked::after {
       content: '';
       position: absolute;
       left: 3px;
@@ -136,8 +136,8 @@ function injectStyles() {
       border-left: none;
       transform: rotate(45deg);
     }
-    .tc-cb:focus-visible { outline: 2px solid var(--tc-accent); outline-offset: 2px; }
-    .tc-lbl {
+    .trl-check-cb:focus-visible { outline: 2px solid var(--trl-check-accent); outline-offset: 2px; }
+    .trl-check-lbl {
       font-size: 14px;
       line-height: 1.55;
       color: #333;
@@ -145,10 +145,10 @@ function injectStyles() {
       user-select: none;
       transition: color 0.2s;
     }
-    .tc-item.tc-done .tc-lbl { color: #bbb; text-decoration: line-through; }
+    .trl-check-item.trl-check-done .trl-check-lbl { color: #bbb; text-decoration: line-through; }
     @media (prefers-reduced-motion: reduce) {
-      .tc-widget { transition: none; opacity: 1; }
-      .tc-bar-fill, .tc-item { transition: none; }
+      .trl-check-widget { transition: none; opacity: 1; }
+      .trl-check-bar-fill, .trl-check-item { transition: none; }
     }
   `);
 }
@@ -157,9 +157,9 @@ function injectStyles() {
 
 function updateProgress(wrap, total, done) {
   const pct  = total ? (done / total * 100).toFixed(1) : 0;
-  const fill = wrap.querySelector('.tc-bar-fill');
-  const bar  = wrap.querySelector('.tc-bar');
-  const ct   = wrap.querySelector('.tc-count');
+  const fill = wrap.querySelector('.trl-check-bar-fill');
+  const bar  = wrap.querySelector('.trl-check-bar');
+  const ct   = wrap.querySelector('.trl-check-count');
   if (fill) fill.style.width = `${pct}%`;
   if (bar)  bar.setAttribute('aria-valuenow', Math.round(pct));
   if (ct)   ct.textContent = `${done} / ${total}`;
@@ -172,40 +172,40 @@ function build(ul) {
   const uid   = key.slice(-8);
 
   const wrap = document.createElement('div');
-  wrap.className = 'tc-widget';
-  wrap.style.setProperty('--tc-accent', '#4a90d9');
+  wrap.className = 'trl-check-widget';
+  wrap.style.setProperty('--trl-check-accent', '#4a90d9');
 
   const doneCt = items.filter((_, i) => state.has(i)).length;
   const pct    = items.length ? (doneCt / items.length * 100).toFixed(1) : 0;
 
   wrap.innerHTML = `
-    <div class="tc-header">
-      <p class="tc-title">${title || 'Checklist'}</p>
-      <span class="tc-count">${doneCt} / ${items.length}</span>
+    <div class="trl-check-header">
+      <p class="trl-check-title">${title || 'Checklist'}</p>
+      <span class="trl-check-count">${doneCt} / ${items.length}</span>
     </div>
-    <div class="tc-bar"
+    <div class="trl-check-bar"
          role="progressbar"
          aria-valuenow="${Math.round(pct)}"
          aria-valuemin="0" aria-valuemax="100"
          aria-label="Completion">
-      <div class="tc-bar-fill" style="width:${pct}%"></div>
+      <div class="trl-check-bar-fill" style="width:${pct}%"></div>
     </div>
-    <ul class="tc-list">
+    <ul class="trl-check-list">
       ${items.map((item, i) => `
-        <li class="tc-item${state.has(i) ? ' tc-done' : ''}" data-i="${i}">
-          <input class="tc-cb" type="checkbox" id="tc-${uid}-${i}"${state.has(i) ? ' checked' : ''}>
-          <label class="tc-lbl" for="tc-${uid}-${i}">${item}</label>
+        <li class="trl-check-item${state.has(i) ? ' trl-check-done' : ''}" data-i="${i}">
+          <input class="trl-check-cb" type="checkbox" id="trl-check-${uid}-${i}"${state.has(i) ? ' checked' : ''}>
+          <label class="trl-check-lbl" for="trl-check-${uid}-${i}">${item}</label>
         </li>`).join('')}
     </ul>
   `;
 
-  wrap.querySelectorAll('.tc-item').forEach(item => {
-    const cb  = item.querySelector('.tc-cb');
-    const lbl = item.querySelector('.tc-lbl');
+  wrap.querySelectorAll('.trl-check-item').forEach(item => {
+    const cb  = item.querySelector('.trl-check-cb');
+    const lbl = item.querySelector('.trl-check-lbl');
 
     cb.addEventListener('change', () => {
       const idx = parseInt(item.dataset.i, 10);
-      item.classList.toggle('tc-done', cb.checked);
+      item.classList.toggle('trl-check-done', cb.checked);
       if (cb.checked) state.add(idx); else state.delete(idx);
       saveState(key, state);
       updateProgress(wrap, items.length, state.size);
@@ -226,7 +226,7 @@ function initOne(ul) {
   injectStyles();
   const wrap = build(ul);
   ul.replaceWith(wrap);
-  onVisible(wrap, () => wrap.classList.add('tc-in'));
+  onVisible(wrap, () => wrap.classList.add('trl-check-in'));
 }
 
 function initAll() {
