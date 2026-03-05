@@ -121,18 +121,13 @@ function buildGauge(pace) {
   // Needle — drawn pointing LEFT (pace=0), rotated clockwise by pace×90° via CSS
   // Triangle tip reaches just inside the arc; base is at center (covered by hub).
   const NR  = R - SW / 2 - 4;  // tip radius
-  const W   = 5;                 // half-width of needle base
+  const W   = 10;                // half-width of needle base
   const needleG = el('g', {});
   needleG.appendChild(el('polygon', {
     points: (CX - NR).toFixed(1) + ',' + CY
           + ' ' + CX + ',' + (CY - W)
           + ' ' + CX + ',' + (CY + W),
     fill: zone.color,
-  }));
-  // Hub — white circle with colored border covers the needle base
-  needleG.appendChild(el('circle', {
-    cx: CX, cy: CY, r: 9,
-    fill: '#fff', stroke: zone.color, 'stroke-width': '2.5',
   }));
   svg.appendChild(needleG);
   needleG.style.transformOrigin = CX + 'px ' + CY + 'px';
