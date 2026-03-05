@@ -5,75 +5,526 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trillian — Component Demo</title>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f0f0f0;
-      padding: 40px 24px;
-      margin: 0;
+      background: #e8e8e8;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+      max-width: 1320px;
     }
-    h2 {
-      font-size: 13px;
-      font-weight: 600;
-      color: #999;
-      letter-spacing: 0.08em;
+
+    /* ── Page header ──────────────────────────────────────────────────────── */
+    .page-header { margin-bottom: 36px; }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #222;
+      margin: 0 0 3px;
+      letter-spacing: -0.03em;
+    }
+    .page-header p { font-size: 13px; color: #aaa; margin: 0; }
+
+    /* ── Sticky column labels ─────────────────────────────────────────────── */
+    .col-labels {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 10px 0 10px;
+      background: #e8e8e8;
+      margin-bottom: 4px;
+    }
+    .col-labels span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin: 40px 0 12px;
+      color: #bbb;
+      padding-left: 2px;
     }
-    h2:first-child { margin-top: 0; }
+
+    /* ── Section headers ──────────────────────────────────────────────────── */
+    h2 {
+      font-size: 11px;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 52px 0 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #d8d8d8;
+    }
+
+    /* ── Variant labels ───────────────────────────────────────────────────── */
+    .variant {
+      font-size: 11px;
+      font-weight: 600;
+      color: #c0c0c0;
+      letter-spacing: 0.04em;
+      margin: 18px 0 8px;
+    }
+
+    /* ── Two-column pair ──────────────────────────────────────────────────── */
+    .demo-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 4px;
+    }
+
+    /* ── Preview column ───────────────────────────────────────────────────── */
+    .demo-preview {
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 24px;
+      min-height: 56px;
+    }
+
+    /* ── Code column ──────────────────────────────────────────────────────── */
+    .demo-code {
+      background: #1a1b26;
+      border-radius: 14px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      align-self: stretch;
+    }
+    .demo-code pre {
+      margin: 0;
+      font-family: 'SF Mono', ui-monospace, 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #a9b1d6;
+      white-space: pre;
+    }
+    /* Dim the list markers so the content reads cleanly */
+    .demo-code pre .marker { color: #565f89; }
+
+    @media (max-width: 860px) {
+      .demo-pair, .col-labels { grid-template-columns: 1fr; }
+      .col-labels span:last-child { display: none; }
+    }
   </style>
 </head>
 <body>
 
-  <h2>Progress Dashboard — row layout</h2>
-  <ul class="progress-dashboard">
-    <li>progress-dashboard</li>
-    <li>session: 3</li>
-    <li>module: 2</li>
-    <li>course-order: 7</li>
-    <li>course-name: Javascript</li>
-    <li>course-code: CS 140</li>
-    <li>total-sessions: 25</li>
-    <li>credits-per-course: 5</li>
-    <li>credits-per-session: 0.2</li>
-    <li>milestone-mini: 20</li>
-    <li>milestone-cert: 45</li>
-    <li>milestone-degree: 90</li>
-    <li>program-short-name: Graphic Design Essentials</li>
-    <li>program-short-title: Short Certificate</li>
-    <li>program-cert-name: Digital Design</li>
-    <li>program-cert-title: Certificate</li>
-    <li>program-degree-name: Graphic Design & Web Development</li>
-    <li>program-degree-title: AAS Degree</li>
-  </ul>
+  <header class="page-header">
+    <h1>Trillian</h1>
+    <p>Canvas LMS component library &mdash; open directly in a browser to preview.</p>
+  </header>
 
-  <h2>Progress Dashboard — column layout</h2>
-  <ul class="progress-dashboard">
-    <li>progress-dashboard</li>
-    <li>session: 14</li>
-    <li>module: 3</li>
-    <li>course-order: 7</li>
-    <li>course-name: Javascript</li>
-    <li>course-code: CS 140</li>
-    <li>layout: column</li>
-    <li>program-short-name: Graphic Design Essentials</li>
-    <li>program-cert-name: Digital Design</li>
-    <li>program-degree-name: Graphic Design & Web Development</li>
-  </ul>
+  <div class="col-labels">
+    <span>Preview</span>
+    <span>Markdown</span>
+  </div>
 
-  <h2>Progress Dashboard — decimal session (Part 2)</h2>
-  <ul class="progress-dashboard">
-    <li>progress-dashboard</li>
-    <li>session: 7.2</li>
-    <li>module: 2</li>
-    <li>course-order: 4</li>
-    <li>course-name: Typography & Layout</li>
-    <li>course-code: GD 110</li>
-    <li>accent-color: #7b68ee</li>
-    <li>program-short-name: Graphic Design Essentials</li>
-    <li>program-cert-name: Digital Design</li>
-    <li>program-degree-name: Graphic Design & Web Development</li>
-  </ul>
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       alert
+  ════════════════════════════════════════════════════════════════════════ -->
 
+  <h2>alert</h2>
+
+  <p class="variant">info</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <blockquote>
+        <p>alert: info</p>
+        <p>This module introduces the core JavaScript data types. No prior experience is required.</p>
+      </blockquote>
+    </div>
+    <div class="demo-code"><pre><code>&gt; alert: info
+&gt;
+&gt; This module introduces the core JavaScript data types.
+&gt; No prior experience is required.</code></pre></div>
+  </div>
+
+  <p class="variant">warning</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <blockquote>
+        <p>alert: warning</p>
+        <p>Your assignment draft is due <strong>Friday at midnight</strong>. Late submissions lose 10% per day.</p>
+      </blockquote>
+    </div>
+    <div class="demo-code"><pre><code>&gt; alert: warning
+&gt;
+&gt; Your assignment draft is due **Friday at midnight**.
+&gt; Late submissions lose 10% per day.</code></pre></div>
+  </div>
+
+  <p class="variant">success</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <blockquote>
+        <p>alert: success</p>
+        <p>Module 3 is now unlocked. You can begin the project brief whenever you're ready.</p>
+      </blockquote>
+    </div>
+    <div class="demo-code"><pre><code>&gt; alert: success
+&gt;
+&gt; Module 3 is now unlocked. You can begin the project
+&gt; brief whenever you're ready.</code></pre></div>
+  </div>
+
+  <p class="variant">error</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <blockquote>
+        <p>alert: error</p>
+        <p>This assignment is now closed. Please contact your instructor if you believe this is an error.</p>
+      </blockquote>
+    </div>
+    <div class="demo-code"><pre><code>&gt; alert: error
+&gt;
+&gt; This assignment is now closed. Please contact your
+&gt; instructor if you believe this is an error.</code></pre></div>
+  </div>
+
+  <p class="variant">tip</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <blockquote>
+        <p>alert: tip</p>
+        <p>Try the browser console (F12) to experiment with today's examples before the quiz.</p>
+      </blockquote>
+    </div>
+    <div class="demo-code"><pre><code>&gt; alert: tip
+&gt;
+&gt; Try the browser console (F12) to experiment with
+&gt; today's examples before the quiz.</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       checklist
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>checklist</h2>
+
+  <p class="variant">with title</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>checklist: Before You Arrive</li>
+        <li>Read Chapter 3 (pp. 45&#8211;67)</li>
+        <li>Watch the intro video (15 min)</li>
+        <li>Complete the warm-up quiz on Canvas</li>
+        <li>Post one question to the discussion board</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- checklist: Before You Arrive
+- Read Chapter 3 (pp. 45–67)
+- Watch the intro video (15 min)
+- Complete the warm-up quiz on Canvas
+- Post one question to the discussion board</code></pre></div>
+  </div>
+
+  <p class="variant">no title</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>checklist</li>
+        <li>Review last week's notes</li>
+        <li>Bring your sketchbook</li>
+        <li>Download the project files from Files</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- checklist
+- Review last week's notes
+- Bring your sketchbook
+- Download the project files from Files</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       buttons
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>buttons</h2>
+
+  <p class="variant">mixed styles — left aligned</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>buttons</li>
+        <li>Start Module 1 · /courses/1/modules/1 · primary</li>
+        <li>View Syllabus · /courses/1/files/1 · secondary</li>
+        <li>Canvas Help · https://community.canvaslms.com · ghost</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- buttons
+- Start Module 1 · /courses/1/modules/1 · primary
+- View Syllabus · /courses/1/files/1 · secondary
+- Canvas Help · https://community.canvaslms.com · ghost</code></pre></div>
+  </div>
+
+  <p class="variant">centred — danger variant</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>buttons: center</li>
+        <li>Submit Assignment · /courses/1/assignments/1 · primary</li>
+        <li>Drop This Course · /courses/1/unenroll · danger</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- buttons: center
+- Submit Assignment · /courses/1/assignments/1 · primary
+- Drop This Course · /courses/1/unenroll · danger</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       accordion
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>accordion</h2>
+
+  <p class="variant">FAQ — labelled</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>accordion: Frequently Asked Questions</li>
+        <li>What is the late policy?
+          <ul>
+            <li>Assignments lose 10% per day. After 5 days, no credit is awarded.</li>
+          </ul>
+        </li>
+        <li>How do I submit work?
+          <ul>
+            <li>Upload your file to the Canvas assignment page.</li>
+            <li>Submissions close at 11:59 PM on the due date.</li>
+          </ul>
+        </li>
+        <li>Can I work in groups?
+          <ul>
+            <li>This course has both individual and group assignments.</li>
+            <li>Check the assignment description to see which applies.</li>
+          </ul>
+        </li>
+        <li>Where do I find the textbook?
+          <ul>
+            <li>The textbook is free online &mdash; a link is in the Resources tab.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- accordion: Frequently Asked Questions
+- What is the late policy?
+  - Assignments lose 10% per day. After 5 days, no credit.
+- How do I submit work?
+  - Upload your file to the Canvas assignment page.
+  - Submissions close at 11:59 PM on the due date.
+- Can I work in groups?
+  - This course has both individual and group assignments.
+  - Check the assignment description to see which applies.
+- Where do I find the textbook?
+  - The textbook is free online — see the Resources tab.</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       tabs
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>tabs</h2>
+
+  <p class="variant">course info</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>tabs</li>
+        <li>Overview
+          <ul>
+            <li>Welcome to CS 140. This course introduces JavaScript fundamentals.</li>
+            <li>No prior programming experience required.</li>
+          </ul>
+        </li>
+        <li>Schedule
+          <ul>
+            <li>Week 1: Variables &amp; Types</li>
+            <li>Week 2: Functions &amp; Scope</li>
+            <li>Week 3: Arrays &amp; Objects</li>
+            <li>Week 4: The DOM</li>
+          </ul>
+        </li>
+        <li>Resources
+          <ul>
+            <li>You Don't Know JS &mdash; free online textbook</li>
+            <li>MDN Web Docs &mdash; comprehensive reference</li>
+            <li>Course files are in the Files section of Canvas</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- tabs
+- Overview
+  - Welcome to CS 140. JavaScript fundamentals.
+  - No prior programming experience required.
+- Schedule
+  - Week 1: Variables &amp; Types
+  - Week 2: Functions &amp; Scope
+  - Week 3: Arrays &amp; Objects
+  - Week 4: The DOM
+- Resources
+  - You Don't Know JS — free online textbook
+  - MDN Web Docs — comprehensive reference
+  - Course files are in the Files section of Canvas</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       stat-row
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>stat-row</h2>
+
+  <p class="variant">course at a glance — named colors</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>stats</li>
+        <li>87% · Completion Rate · accent</li>
+        <li>12 · Weeks · degree</li>
+        <li>5 · Credits · cert</li>
+        <li>320 · Students · neutral</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- stats
+- 87% · Completion Rate · accent
+- 12 · Weeks · degree
+- 5 · Credits · cert
+- 320 · Students · neutral</code></pre></div>
+  </div>
+
+  <p class="variant">custom hex colors</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>stats</li>
+        <li>$0 · Tuition · success</li>
+        <li>24/7 · Access · #e8a838</li>
+        <li>100% · Online · #4a90d9</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- stats
+- $0 · Tuition · success
+- 24/7 · Access · #e8a838
+- 100% · Online · #4a90d9</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       progress-dashboard
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>progress-dashboard</h2>
+
+  <p class="variant">row layout</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>progress-dashboard</li>
+        <li>session: 3</li>
+        <li>module: 2</li>
+        <li>course-order: 7</li>
+        <li>course-name: Javascript</li>
+        <li>course-code: CS 140</li>
+        <li>total-sessions: 25</li>
+        <li>credits-per-course: 5</li>
+        <li>credits-per-session: 0.2</li>
+        <li>milestone-mini: 20</li>
+        <li>milestone-cert: 45</li>
+        <li>milestone-degree: 90</li>
+        <li>program-short-name: Graphic Design Essentials</li>
+        <li>program-short-title: Short Certificate</li>
+        <li>program-cert-name: Digital Design</li>
+        <li>program-cert-title: Certificate</li>
+        <li>program-degree-name: Graphic Design &amp; Web Development</li>
+        <li>program-degree-title: AAS Degree</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- progress-dashboard
+- session: 3
+- module: 2
+- course-order: 7
+- course-name: Javascript
+- course-code: CS 140
+- total-sessions: 25
+- credits-per-course: 5
+- credits-per-session: 0.2
+- milestone-mini: 20
+- milestone-cert: 45
+- milestone-degree: 90
+- program-short-name: Graphic Design Essentials
+- program-short-title: Short Certificate
+- program-cert-name: Digital Design
+- program-cert-title: Certificate
+- program-degree-name: Graphic Design &amp; Web Development
+- program-degree-title: AAS Degree</code></pre></div>
+  </div>
+
+  <p class="variant">column layout</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>progress-dashboard</li>
+        <li>session: 14</li>
+        <li>module: 3</li>
+        <li>course-order: 7</li>
+        <li>course-name: Javascript</li>
+        <li>course-code: CS 140</li>
+        <li>layout: column</li>
+        <li>program-short-name: Graphic Design Essentials</li>
+        <li>program-cert-name: Digital Design</li>
+        <li>program-degree-name: Graphic Design &amp; Web Development</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- progress-dashboard
+- session: 14
+- module: 3
+- course-order: 7
+- course-name: Javascript
+- course-code: CS 140
+- layout: column
+- program-short-name: Graphic Design Essentials
+- program-cert-name: Digital Design
+- program-degree-name: Graphic Design &amp; Web Development</code></pre></div>
+  </div>
+
+  <p class="variant">decimal session (Part 2) — custom accent</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>progress-dashboard</li>
+        <li>session: 7.2</li>
+        <li>module: 2</li>
+        <li>course-order: 4</li>
+        <li>course-name: Typography &amp; Layout</li>
+        <li>course-code: GD 110</li>
+        <li>accent-color: #7b68ee</li>
+        <li>program-short-name: Graphic Design Essentials</li>
+        <li>program-cert-name: Digital Design</li>
+        <li>program-degree-name: Graphic Design &amp; Web Development</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- progress-dashboard
+- session: 7.2
+- module: 2
+- course-order: 4
+- course-name: Typography &amp; Layout
+- course-code: GD 110
+- accent-color: #7b68ee
+- program-short-name: Graphic Design Essentials
+- program-cert-name: Digital Design
+- program-degree-name: Graphic Design &amp; Web Development</code></pre></div>
+  </div>
+
+  <!-- ── Scripts ──────────────────────────────────────────────────────────── -->
   <script src="../components/progress-dashboard.js"></script>
+  <script src="../components/alert.js"></script>
+  <script src="../components/checklist.js"></script>
+  <script src="../components/buttons.js"></script>
+  <script src="../components/accordion.js"></script>
+  <script src="../components/tabs.js"></script>
+  <script src="../components/stat-row.js"></script>
 </body>
 </html>

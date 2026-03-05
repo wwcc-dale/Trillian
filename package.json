@@ -1,0 +1,13 @@
+{
+  "name": "trillian",
+  "version": "1.0.0",
+  "description": "Canvas LMS component library",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

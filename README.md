@@ -76,6 +76,124 @@ Displays a horseshoe session-progress gauge and program milestone bars.
 
 When used with Zaphod, values are injected via `{{var:...}}` expressions in `dash.md` (in `_all_courses/shared/`). All computation happens in the browser — the page just carries raw frontmatter values.
 
+---
+
+### `alert`
+
+Inline callout box with icon. Identified by a `<blockquote>` (markdown `>`).
+
+**Markdown pattern:**
+
+```markdown
+> alert: warning
+>
+> Your assignment draft is due Friday. Late submissions lose 10% per day.
+```
+
+Use a blank line between the type declaration and the message body so Canvas produces separate `<p>` elements. Inline formatting (`**bold**`, `*italic*`, links) works in the body.
+
+**Types:** `info` · `warning` · `success` · `error` · `tip`
+
+---
+
+### `checklist`
+
+Interactive checkbox list with a progress bar. State persists to `localStorage`.
+
+**Markdown pattern:**
+
+```markdown
+- checklist: Before You Arrive
+- Read Chapter 3 (pp. 45–67)
+- Watch the intro video (15 min)
+- Post one question to the discussion board
+```
+
+The title after the colon is optional — omit it for an untitled checklist. Checked state is keyed by page URL path + list content hash, so two checklists on the same page stay independent.
+
+---
+
+### `buttons`
+
+A flex row of styled link buttons.
+
+**Markdown pattern:**
+
+```markdown
+- buttons
+- Start Module 1 · /courses/1/modules/1 · primary
+- Download Syllabus · /courses/1/files/1 · ghost
+```
+
+**Item format:** `label · href · style`
+Separator: `·` (U+00B7 middle dot) or ` | ` (space-pipe-space).
+**Styles:** `primary` · `secondary` · `ghost` · `danger`
+
+**First `<li>` options:**
+- `buttons` — left-aligned (default)
+- `buttons: center` — centred
+- `buttons: right` — right-aligned
+
+---
+
+### `accordion`
+
+Expandable sections. Uses nested lists: outer `<li>` direct text is the heading; nested `<ul>` items are body paragraphs.
+
+**Markdown pattern:**
+
+```markdown
+- accordion: FAQ
+- What is the late policy?
+  - Assignments lose 10% per day. After 5 days, no credit.
+- How do I submit work?
+  - Upload to the Canvas assignment page.
+  - Submissions close at 11:59 PM on the due date.
+```
+
+The label after the colon is optional.
+
+---
+
+### `tabs`
+
+Tabbed content panels. Same nested-list structure as accordion — outer `<li>` direct text is the tab label; nested `<ul>` items are panel paragraphs.
+
+**Markdown pattern:**
+
+```markdown
+- tabs
+- Overview
+  - Welcome to this course. No prior experience required.
+- Schedule
+  - Week 1: Variables & Types
+  - Week 2: Functions & Scope
+- Resources
+  - You Don't Know JS — free online textbook
+```
+
+Keyboard navigation: arrow keys move between tabs, Home/End jump to first/last.
+
+---
+
+### `stat-row`
+
+A horizontal row of key-number callout cards. Numbers animate on scroll.
+
+**Markdown pattern:**
+
+```markdown
+- stats
+- 87% · Completion Rate · accent
+- 12 · Weeks · degree
+- 5 · Credits · cert
+```
+
+**Item format:** `value · label [· color]`
+Separator: `·` or ` | `.
+**Color keywords:** `accent` · `cert` · `degree` · `success` · `error` · `neutral` · or any hex colour (e.g. `#e8a838`).
+Numeric values animate with a count-up on scroll into view. Non-numeric values (e.g. `A+`, `$0`) display immediately.
+
 ## Development
 
 Open `demo/index.html` directly in a browser to preview components without Canvas.
