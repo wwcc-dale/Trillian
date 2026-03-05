@@ -1,8 +1,8 @@
 /**
  * Progress Dashboard Widget
  *
- * Finds every <ul class="progress-dashboard"> on the page, reads its <li>
- * key: value pairs, and replaces it with a rendered progress dashboard.
+ * Finds every <ul> whose first <li> contains "progress-dashboard", reads its
+ * remaining <li> key: value pairs, and replaces the list with a rendered widget.
  *
  * Supported keys (all optional — safe defaults apply):
  *   session, module, course-order, course-name
