@@ -1,0 +1,2 @@
+/* Trillian — Canvas LMS component library | github.com/wwcc-dale/trillian */
+(()=>{var t=window.ENV,r=t&&t.COURSE_ID,n=t&&t.current_user_id;if(r&&n){let c=/^\/courses\/\d+\/(pages|assignments|quizzes|discussion_topics|modules\/items)\//,e=window.location.pathname;if(c.test(e)){let o="trl-pace-log-"+r+"-"+n;try{let s=JSON.parse(localStorage.getItem(o)||"[]");Array.isArray(s)||(s=[]),s.some(function(i){return i.url===e})||(s.push({url:e,t:Date.now()}),localStorage.setItem(o,JSON.stringify(s)))}catch(s){}}}})();
