@@ -111,7 +111,7 @@
     }
   </style>
 </head>
-<body>
+<body class="zaphod trillian">
 
   <header class="page-header">
     <h1>Trillian</h1>
@@ -121,6 +121,49 @@
   <div class="col-labels">
     <span>Preview</span>
     <span>Markdown</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       pill
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>pill</h2>
+
+  <p class="variant">all colors — inline in text</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <p>
+        Status: <a href="#pill:success">Passing</a> &nbsp;
+        <a href="#pill:warning">Due Friday</a> &nbsp;
+        <a href="#pill:error">Overdue</a> &nbsp;
+        <a href="#pill:info">In Review</a> &nbsp;
+        <a href="#pill:tip">Pro Tip</a> &nbsp;
+        <a href="#pill:cert">Certificate</a> &nbsp;
+        <a href="#pill:degree">AAS Degree</a> &nbsp;
+        <a href="#pill:neutral">Optional</a> &nbsp;
+        <a href="#pill">Default</a>
+      </p>
+    </div>
+    <div class="demo-code"><pre><code>[Passing](#pill:success)
+[Due Friday](#pill:warning)
+[Overdue](#pill:error)
+[In Review](#pill:info)
+[Pro Tip](#pill:tip)
+[Certificate](#pill:cert)
+[AAS Degree](#pill:degree)
+[Optional](#pill:neutral)
+[Default](#pill)</code></pre></div>
+  </div>
+
+  <p class="variant">inline in a sentence</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <p>Submit your project draft by Friday. Late submissions <a href="#pill:warning">lose 10%</a> per day and are not accepted after <a href="#pill:error">5 days</a>. Early submissions earn a <a href="#pill:success">+5 bonus</a>.</p>
+    </div>
+    <div class="demo-code"><pre><code>Submit your project draft by Friday.
+Late submissions [lose 10%](#pill:warning) per day
+and are not accepted after [5 days](#pill:error).
+Early submissions earn a [+5 bonus](#pill:success).</code></pre></div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
@@ -273,6 +316,36 @@
     <div class="demo-code"><pre><code>- buttons: center
 - Submit Assignment · /courses/1/assignments/1 · primary
 - Drop This Course · /courses/1/unenroll · danger</code></pre></div>
+  </div>
+
+  <p class="variant">icons — left (default)</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>buttons</li>
+        <li>Download Syllabus · /courses/1/files/1 · ghost · download</li>
+        <li>Watch Overview · /pages/overview · secondary · play</li>
+        <li>Start Module 1 · /courses/1/modules/1 · primary · book-open</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- buttons
+- Download Syllabus · /courses/1/files/1 · ghost · download
+- Watch Overview · /pages/overview · secondary · play
+- Start Module 1 · /courses/1/modules/1 · primary · book-open</code></pre></div>
+  </div>
+
+  <p class="variant">icons — right</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>buttons</li>
+        <li>Continue to Module 2 · /courses/1/modules/2 · primary · arrow-right · right</li>
+        <li>Open in Canvas · /courses/1 · secondary · external-link · right</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- buttons
+- Continue to Module 2 · /courses/1/modules/2 · primary · arrow-right · right
+- Open in Canvas · /courses/1 · secondary · external-link · right</code></pre></div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
@@ -518,13 +591,244 @@
 - program-degree-name: Graphic Design &amp; Web Development</code></pre></div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       lightbox
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>lightbox</h2>
+
+  <p class="variant">click image (not in link) → fullscreen overlay</p>
+  <div class="demo-pair">
+    <div class="demo-preview" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+      <img src="https://picsum.photos/seed/trillian1/320/200" alt="A scenic mountain landscape with snow-capped peaks" style="width:160px;border-radius:6px;">
+      <img src="https://picsum.photos/seed/trillian2/320/200" alt="Aerial view of a city at dusk" style="width:160px;border-radius:6px;">
+      <a href="#"><img src="https://picsum.photos/seed/trillian3/320/200" alt="This one is in a link — no lightbox" style="width:160px;border-radius:6px;opacity:0.5;"></a>
+    </div>
+    <div class="demo-code"><pre><code>![A scenic mountain landscape](image.jpg)
+![Aerial view of a city at dusk](image2.jpg)
+
+[![In a link — no lightbox](thumb.jpg)](page.html)</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       flow-accordion
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>flow-accordion</h2>
+
+  <p class="variant">arbitrary DOM content between h6 triggers</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>flow-accordion</li>
+      </ul>
+      <h6>Week 1: Introduction to Typography</h6>
+      <p>Typography is the art of arranging type to make written language legible and appealing. We begin with the basics: typeface classification, anatomy of a letterform, and typographic hierarchy.</p>
+      <ul>
+        <li>stats</li>
+        <li>4 · Readings · accent</li>
+        <li>2 · Videos · success</li>
+        <li>1 · Quiz · warning</li>
+      </ul>
+      <h6>Week 2: Colour Theory</h6>
+      <p>We explore the colour wheel, hue, saturation, and lightness. You'll learn to build harmonious palettes using complementary, analogous, and triadic relationships.</p>
+      <p>Expect a hands-on Penpot exercise and a short colour-matching quiz.</p>
+      <h6>Week 3: Layout &amp; Grid Systems</h6>
+      <p>Grids are the invisible scaffolding of great design. This week covers baseline grids, column grids, and responsive layout patterns used in modern web design.</p>
+    </div>
+    <div class="demo-code"><pre><code>- flow-accordion
+
+###### Week 1: Introduction to Typography
+Paragraph content here...
+
+- stats
+- 4 · Readings · accent
+- 2 · Videos · success
+- 1 · Quiz · warning
+
+###### Week 2: Colour Theory
+Another paragraph...
+
+###### Week 3: Layout &amp; Grid Systems
+More content...</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       flow-tabs
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>flow-tabs</h2>
+
+  <p class="variant">same concept, tab panel layout</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>flow-tabs</li>
+      </ul>
+      <h6>Overview</h6>
+      <p>This course introduces the principles of interface design through a project-based curriculum. Students complete a series of design challenges culminating in a full interface prototype.</p>
+      <p><strong>Prerequisites:</strong> No prior design experience required.</p>
+      <h6>Schedule</h6>
+      <p>Sessions meet twice weekly. Each session includes a short lecture, an in-class exercise, and a critique segment.</p>
+      <ul>
+        <li>Week 1–3: Foundation concepts</li>
+        <li>Week 4–6: Typography &amp; colour</li>
+        <li>Week 7–9: Layout &amp; grid</li>
+        <li>Week 10–12: Interface patterns</li>
+      </ul>
+      <h6>Assessment</h6>
+      <p>Final grade is based on four project submissions (60%), weekly exercises (25%), and participation (15%).</p>
+    </div>
+    <div class="demo-code"><pre><code>- flow-tabs
+
+###### Overview
+Paragraph...
+
+###### Schedule
+- Week 1–3: Foundation concepts
+- Week 4–6: Typography &amp; colour
+
+###### Assessment
+More content...</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       code-highlight
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>code-highlight</h2>
+
+  <p class="variant">javascript</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <pre><code class="language-javascript">// Fetch course data and render a summary
+async function loadCourse(id) {
+  const res  = await fetch(`/api/courses/${id}`);
+  const data = await res.json();
+  return {
+    title:    data.name,
+    sessions: data.sessions.length,
+    complete: data.sessions.filter(s => s.done).length,
+  };
+}</code></pre>
+    </div>
+    <div class="demo-code"><pre><code>```javascript
+async function loadCourse(id) {
+  const res = await fetch(`/api/courses/${id}`);
+  ...
+}
+```</code></pre></div>
+  </div>
+
+  <p class="variant">css</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <pre><code class="language-css">.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}</code></pre>
+    </div>
+    <div class="demo-code"><pre><code>```css
+.card { display: flex; ... }
+```</code></pre></div>
+  </div>
+
+  <p class="variant">python</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <pre><code class="language-python">def fibonacci(n: int) -> list[int]:
+    """Return the first n Fibonacci numbers."""
+    seq = [0, 1]
+    for _ in range(n - 2):
+        seq.append(seq[-1] + seq[-2])
+    return seq[:n]
+
+print(fibonacci(10))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</code></pre>
+    </div>
+    <div class="demo-code"><pre><code>```python
+def fibonacci(n: int) -> list[int]:
+    ...
+```</code></pre></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       pace-dashboard
+  ════════════════════════════════════════════════════════════════════════ -->
+
+  <h2>pace-dashboard</h2>
+
+  <p class="variant">on track (demo data pre-seeded in localStorage)</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>pace-dashboard</li>
+        <li>total-pages: 48</li>
+        <li>start-date: 2025-01-13</li>
+        <li>end-date: 2025-05-02</li>
+        <li>target-date: 2025-04-15</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- pace-dashboard
+- total-pages: 48
+- start-date: 2025-01-13
+- end-date:   2025-05-02
+- target-date: 2025-04-15</code></pre></div>
+  </div>
+
+  <p class="variant">behind (no target date)</p>
+  <div class="demo-pair">
+    <div class="demo-preview">
+      <ul>
+        <li>pace-dashboard</li>
+        <li>total-pages: 48</li>
+        <li>start-date: 2025-01-13</li>
+        <li>end-date: 2025-05-02</li>
+      </ul>
+    </div>
+    <div class="demo-code"><pre><code>- pace-dashboard
+- total-pages: 48
+- start-date: 2025-01-13
+- end-date:   2025-05-02</code></pre></div>
+  </div>
+
   <!-- ── Scripts ──────────────────────────────────────────────────────────── -->
+
+  <!-- Seed demo localStorage for pace-dashboard (simulates real page tracking) -->
+  <script>
+    (function () {
+      var key = 'trl-pace-log-demo-demo';
+      // 28 pages visited over ~7 weeks of a 48-page course
+      // Course started 2025-01-13, today is ~2025-03-05 = 51 days elapsed
+      // Expected: 51/109 * 48 ≈ 22 pages. Actual: 28. paceRatio ≈ 1.27 (Ahead)
+      var log = [];
+      var base = new Date('2025-01-13').getTime();
+      for (var i = 0; i < 28; i++) {
+        log.push({ url: '/courses/demo/pages/week-' + (i + 1), t: base + i * 1.6 * 86400000 });
+      }
+      try { localStorage.setItem(key, JSON.stringify(log)); } catch (_) {}
+    })();
+  </script>
+
   <script src="../components/progress-dashboard.js"></script>
   <script src="../components/alert.js"></script>
+  <script src="../components/pill.js"></script>
   <script src="../components/checklist.js"></script>
   <script src="../components/buttons.js"></script>
   <script src="../components/accordion.js"></script>
   <script src="../components/tabs.js"></script>
   <script src="../components/stat-row.js"></script>
+  <script src="../components/lightbox.js"></script>
+  <script src="../components/flow-panels.js"></script>
+  <script src="../components/code-highlight.js"></script>
+  <script src="../components/page-tracker.js"></script>
+  <script src="../components/pace-dashboard.js"></script>
 </body>
 </html>
