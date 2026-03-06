@@ -14,5 +14,7 @@ import './progress-dashboard.js';
 import './lightbox.js';
 import './flow-panels.js';
 import './code-highlight.js';
+import './steps.js';
+import './carousel.js';
 import './page-tracker.js';
 import './pace-dashboard.js';

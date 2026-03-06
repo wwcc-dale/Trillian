@@ -138,12 +138,15 @@ function buildGauge(pace) {
   const NR  = R - SW / 2 - 4;  // tip radius
   const W   = 10;                // half-width of needle base
   const needleG = el('g', {});
+  // Triangle body
   needleG.appendChild(el('polygon', {
     points: (CX - NR).toFixed(1) + ',' + CY
           + ' ' + CX + ',' + (CY - W)
           + ' ' + CX + ',' + (CY + W),
     fill: zone.color,
   }));
+  // Semicircle base — rounds the blunt end to match the thermometer gauge style
+  needleG.appendChild(el('circle', { cx: CX, cy: CY, r: W, fill: zone.color }));
   svg.appendChild(needleG);
   needleG.style.transformOrigin = CX + 'px ' + CY + 'px';
   needleG.style.transform = 'rotate(0deg)';
