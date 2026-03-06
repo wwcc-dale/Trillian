@@ -36,6 +36,7 @@
  *   trl-pace-data-{courseId}-{userId} → [{url, t, vs, ss, ts}]
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './pace-dashboard.css';
 
 const MARKER = 'pace-dashboard';
 
@@ -168,112 +169,7 @@ function buildGauge(pace) {
 // ── Styles ───────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-pace-styles', `
-    .trl-pace-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.08);
-      padding: 20px 20px 18px;
-      max-width: 320px;
-      box-sizing: border-box;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-pace-widget.trl-pace-in { opacity: 1; }
-    .trl-pace-label {
-      font-size: 22px;
-      font-weight: 800;
-      text-align: center;
-      margin: 4px 0 2px;
-      letter-spacing: -0.02em;
-    }
-    .trl-pace-sub {
-      font-size: 12px;
-      color: #aaa;
-      text-align: center;
-      margin: 0 0 14px;
-    }
-    .trl-pace-stats {
-      border-top: 1px solid #f0f0f0;
-      padding-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .trl-pace-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 13px;
-    }
-    .trl-pace-row-label { color: #aaa; }
-    .trl-pace-row-value { font-weight: 600; color: #222; }
-    .trl-pace-row-value.trl-pace-dim { color: #bbb; font-weight: 400; }
-    .trl-pace-track-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 4px;
-    }
-    .trl-pace-track-yes { background: #f0fdf4; color: #15803d; }
-    .trl-pace-track-no  { background: #fef2f2; color: #b91c1c; }
-    .trl-pace-program {
-      border-top: 1px solid #f0f0f0;
-      padding-top: 12px;
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .trl-pace-section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #ccc;
-      margin: 0 0 2px;
-    }
-    .trl-pace-milestone {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 13px;
-      gap: 8px;
-    }
-    .trl-pace-milestone-name {
-      color: #aaa;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .trl-pace-milestone-name strong {
-      display: block;
-      font-weight: 600;
-      color: #555;
-      font-size: 11px;
-    }
-    .trl-pace-milestone-date {
-      font-weight: 600;
-      color: #222;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .trl-pace-milestone-done {
-      font-weight: 600;
-      color: #22c55e;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-pace-widget { transition: none; opacity: 1; }
-    }
-  `);
+  injectOnce('trl-pace-styles', styles);
 }
 
 // ── Data helpers ─────────────────────────────────────────────────────────────

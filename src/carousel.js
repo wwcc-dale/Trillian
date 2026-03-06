@@ -29,6 +29,7 @@
  * DOM siblings rather than being constrained to <li> nesting.
  */
 import { injectOnce, watchForNew } from './utils.js';
+import styles from './carousel.css';
 
 const MARKER = 'carousel';
 
@@ -36,108 +37,7 @@ const SVG_PREV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const SVG_NEXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
 
 function injectStyles() {
-  injectOnce('trl-carousel-styles', `
-    .trl-carousel {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      max-width: 560px;
-      box-sizing: border-box;
-    }
-    .trl-carousel-stage {
-      position: relative;
-    }
-    .trl-carousel-viewport {
-      overflow: hidden;
-      border-radius: 12px;
-      background: #f4f4f4;
-    }
-    .trl-carousel-track {
-      display: flex;
-      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .trl-carousel-slide {
-      flex: 0 0 100%;
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 160px;
-    }
-    .trl-carousel-slide--image img {
-      width: 100%;
-      display: block;
-      max-height: 360px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-    .trl-carousel-caption {
-      font-size: 12px;
-      color: #aaa;
-      text-align: center;
-      padding: 8px 16px 12px;
-      margin: 0;
-    }
-    .trl-carousel-slide--content {
-      padding: 28px 24px;
-      background: #fff;
-    }
-    .trl-carousel-slide-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #222;
-      margin: 0 0 10px;
-      letter-spacing: -0.01em;
-    }
-    .trl-carousel-body {
-      font-size: 14px;
-      color: #555;
-      line-height: 1.6;
-    }
-    .trl-carousel-body ul { margin: 0; padding-left: 18px; }
-    .trl-carousel-body li { margin: 4px 0; }
-    .trl-carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(0,0,0,0.08);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #333;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-      padding: 0;
-      z-index: 2;
-      transition: box-shadow 0.15s ease;
-    }
-    .trl-carousel-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
-    .trl-carousel-btn svg { width: 16px; height: 16px; }
-    .trl-carousel-prev { left: 8px; }
-    .trl-carousel-next { right: 8px; }
-    .trl-carousel-btn[disabled] { opacity: 0.25; pointer-events: none; }
-    .trl-carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 0 0;
-    }
-    .trl-carousel-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #ddd;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease;
-    }
-    .trl-carousel-dot--active { background: #333; transform: scale(1.25); }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-carousel-track { transition: none; }
-      .trl-carousel-dot   { transition: none; }
-    }
-  `);
+  injectOnce('trl-carousel-styles', styles);
 }
 
 function isCarousel(ul) {

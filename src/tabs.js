@@ -13,72 +13,14 @@
  * Keyboard navigation: Arrow Left/Right, Home/End, Enter/Space.
  */
 import { directText, nestedContent, injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './tabs.css';
 
 const MARKER = 'tabs';
 
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-tabs-styles', `
-    .trl-tabs-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.08);
-      overflow: hidden;
-      max-width: 640px;
-      box-sizing: border-box;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-tabs-widget.trl-tabs-in { opacity: 1; }
-    .trl-tabs-tablist {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid #f0f0f0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .trl-tabs-tablist::-webkit-scrollbar { display: none; }
-    .trl-tabs-tab {
-      flex-shrink: 0;
-      padding: 14px 20px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -1px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      color: #999;
-      transition: color 0.2s, border-color 0.2s;
-      white-space: nowrap;
-    }
-    .trl-tabs-tab:hover { color: #555; }
-    .trl-tabs-tab:focus-visible { outline: 2px solid var(--trl-tabs-accent); outline-offset: -2px; }
-    .trl-tabs-tab[aria-selected="true"] {
-      color: var(--trl-tabs-accent);
-      border-bottom-color: var(--trl-tabs-accent);
-    }
-    .trl-tabs-panels { padding: 20px; }
-    .trl-tabs-panel {
-      display: none;
-      font-size: 14px;
-      line-height: 1.65;
-      color: #444;
-      animation: trl-tabs-fade 0.2s ease;
-    }
-    .trl-tabs-panel.trl-tabs-active { display: block; }
-    @keyframes trl-tabs-fade { from { opacity: 0; } to { opacity: 1; } }
-    .trl-tabs-panel p { margin: 0; }
-    .trl-tabs-panel p + p { margin-top: 8px; }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-tabs-widget { transition: none; opacity: 1; }
-      .trl-tabs-tab { transition: none; }
-      @keyframes trl-tabs-fade { from { opacity: 1; } }
-    }
-  `);
+  injectOnce('trl-tabs-styles', styles);
 }
 
 // ── Identify + parse ──────────────────────────────────────────────────────

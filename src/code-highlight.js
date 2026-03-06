@@ -26,84 +26,13 @@ import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-markdown';
 import { injectOnce, watchForNew } from './utils.js';
+import styles from './code-highlight.css';
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 // Custom Trillian theme — clean, light, readable.
 
 function injectStyles() {
-  injectOnce('trl-code-styles', `
-    pre[class*="language-"],
-    code[class*="language-"] {
-      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Consolas, monospace;
-      font-size: 13px;
-      line-height: 1.6;
-      direction: ltr;
-      text-align: left;
-      white-space: pre;
-      word-spacing: normal;
-      word-break: normal;
-      tab-size: 2;
-      hyphens: none;
-    }
-    pre[class*="language-"] {
-      background: #f6f8fa;
-      border: 1px solid #e8eaed;
-      border-radius: 8px;
-      padding: 16px 18px;
-      overflow: auto;
-      margin: 0 0 16px;
-    }
-    :not(pre) > code[class*="language-"] {
-      background: #f0f3f6;
-      border-radius: 4px;
-      padding: 2px 5px;
-    }
-    .trl-code-label {
-      display: block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #aaa;
-      margin-bottom: 8px;
-    }
-
-    /* Tokens */
-    .token.comment,
-    .token.prolog,
-    .token.doctype,
-    .token.cdata          { color: #6e7781; }
-    .token.punctuation    { color: #555; }
-    .token.property,
-    .token.tag,
-    .token.boolean,
-    .token.number,
-    .token.constant,
-    .token.symbol,
-    .token.deleted        { color: #cf222e; }
-    .token.selector,
-    .token.attr-name,
-    .token.string,
-    .token.char,
-    .token.builtin,
-    .token.inserted       { color: #0a3069; }
-    .token.operator,
-    .token.entity,
-    .token.url,
-    .language-css .token.string,
-    .style .token.string  { color: #953800; }
-    .token.atrule,
-    .token.attr-value,
-    .token.keyword        { color: #8250df; }
-    .token.function,
-    .token.class-name     { color: #1a7f37; }
-    .token.regex,
-    .token.important,
-    .token.variable       { color: #e16209; }
-    .token.important,
-    .token.bold           { font-weight: 600; }
-    .token.italic         { font-style: italic; }
-  `);
+  injectOnce('trl-code-styles', styles);
 }
 
 // ── Language label map ────────────────────────────────────────────────────

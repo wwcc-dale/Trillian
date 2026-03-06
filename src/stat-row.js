@@ -12,6 +12,7 @@
  *   color:      accent | cert | degree | success | error | neutral | #rrggbb
  */
 import { ease, injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './stat-row.css';
 
 const MARKER = 'stats';
 
@@ -35,50 +36,7 @@ function resolveColor(raw) {
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-stat-styles', `
-    .trl-stat-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-stat-row.trl-stat-in { opacity: 1; }
-    .trl-stat-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      flex: 1;
-      min-width: 80px;
-      background: #fff;
-      border-radius: 14px;
-      border-top: 4px solid var(--trl-stat-color);
-      padding: 16px 14px 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.07);
-      box-sizing: border-box;
-      text-align: center;
-    }
-    .trl-stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      line-height: 1;
-      color: var(--trl-stat-color);
-      letter-spacing: -0.03em;
-      font-variant-numeric: tabular-nums;
-    }
-    .trl-stat-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: #aaa;
-      letter-spacing: 0.02em;
-      line-height: 1.3;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-stat-row { transition: none; opacity: 1; }
-    }
-  `);
+  injectOnce('trl-stat-styles', styles);
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────

@@ -14,6 +14,7 @@
  *   "accordion: FAQ"   — label above the accordion
  */
 import { directText, nestedContent, injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './accordion.css';
 
 const MARKER = 'accordion';
 
@@ -22,73 +23,7 @@ const CHEVRON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" ari
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-acc-styles', `
-    .trl-acc-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.08);
-      overflow: hidden;
-      max-width: 640px;
-      box-sizing: border-box;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-acc-widget.trl-acc-in { opacity: 1; }
-    .trl-acc-label {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #aaa;
-      padding: 18px 20px 0;
-      margin: 0;
-    }
-    .trl-acc-item { border-bottom: 1px solid #f0f0f0; }
-    .trl-acc-item:last-child { border-bottom: none; }
-    .trl-acc-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      width: 100%;
-      padding: 16px 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      color: #222;
-      text-align: left;
-      transition: background 0.15s;
-    }
-    .trl-acc-trigger:hover { background: #fafafa; }
-    .trl-acc-trigger:focus-visible { outline: 2px solid var(--trl-acc-accent); outline-offset: -2px; }
-    .trl-acc-chevron {
-      flex-shrink: 0;
-      color: #aaa;
-      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .trl-acc-trigger[aria-expanded="true"] .trl-acc-chevron { transform: rotate(180deg); }
-    .trl-acc-panel {
-      overflow: hidden;
-      height: 0;
-      transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .trl-acc-panel-inner {
-      padding: 4px 20px 18px;
-      font-size: 14px;
-      line-height: 1.65;
-      color: #555;
-    }
-    .trl-acc-panel-inner p { margin: 0; }
-    .trl-acc-panel-inner p + p { margin-top: 8px; }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-acc-widget { transition: none; opacity: 1; }
-      .trl-acc-panel, .trl-acc-chevron { transition: none; }
-    }
-  `);
+  injectOnce('trl-acc-styles', styles);
 }
 
 // ── Panel animation ───────────────────────────────────────────────────────

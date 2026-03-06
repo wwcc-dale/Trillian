@@ -10,6 +10,7 @@
  * Types: checklist | checklist: Title
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './checklist.css';
 
 const MARKER = 'checklist';
 
@@ -53,104 +54,7 @@ function parseList(ul) {
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-check-styles', `
-    .trl-check-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.08);
-      padding: 22px 24px 20px;
-      max-width: 520px;
-      box-sizing: border-box;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-check-widget.trl-check-in { opacity: 1; }
-    .trl-check-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .trl-check-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #aaa;
-      margin: 0;
-    }
-    .trl-check-count { font-size: 12px; color: #bbb; }
-    .trl-check-bar {
-      height: 4px;
-      background: #eee;
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-    .trl-check-bar-fill {
-      height: 100%;
-      background: var(--trl-check-accent);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .trl-check-list { list-style: none; margin: 0; padding: 0; }
-    .trl-check-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .trl-check-item:hover { background: #f7f7f7; }
-    .trl-check-cb {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      border: 2px solid #d4d4d4;
-      border-radius: 5px;
-      cursor: pointer;
-      position: relative;
-      margin-top: 2px;
-      background: #fff;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .trl-check-cb:checked {
-      background: var(--trl-check-accent);
-      border-color: var(--trl-check-accent);
-    }
-    .trl-check-cb:checked::after {
-      content: '';
-      position: absolute;
-      left: 3px;
-      top: 0px;
-      width: 6px;
-      height: 10px;
-      border: 2px solid #fff;
-      border-top: none;
-      border-left: none;
-      transform: rotate(45deg);
-    }
-    .trl-check-cb:focus-visible { outline: 2px solid var(--trl-check-accent); outline-offset: 2px; }
-    .trl-check-lbl {
-      font-size: 14px;
-      line-height: 1.55;
-      color: #333;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.2s;
-    }
-    .trl-check-item.trl-check-done .trl-check-lbl { color: #bbb; text-decoration: line-through; }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-check-widget { transition: none; opacity: 1; }
-      .trl-check-bar-fill, .trl-check-item { transition: none; }
-    }
-  `);
+  injectOnce('trl-check-styles', styles);
 }
 
 // ── Build ─────────────────────────────────────────────────────────────────

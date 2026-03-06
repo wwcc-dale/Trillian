@@ -20,6 +20,7 @@
  */
 import { hexA, injectOnce, onVisible, watchForNew } from './utils.js';
 import { icon } from './icons.js';
+import styles from './buttons.css';
 
 const MARKER = 'buttons';
 const VALID_STYLES = ['primary', 'secondary', 'ghost', 'danger'];
@@ -27,67 +28,7 @@ const VALID_STYLES = ['primary', 'secondary', 'ghost', 'danger'];
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-btn-styles', `
-    .trl-btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .trl-btn-row.trl-btn-in { opacity: 1; }
-    .trl-btn-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 9px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1;
-      text-decoration: none;
-      cursor: pointer;
-      transition: filter 0.15s ease, box-shadow 0.15s ease;
-      box-sizing: border-box;
-      white-space: nowrap;
-    }
-    .trl-btn-btn:hover  { filter: brightness(1.08); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-    .trl-btn-btn:active { filter: brightness(0.95); }
-    .trl-btn-primary {
-      background: var(--trl-btn-accent);
-      color: #fff;
-      border: 2px solid transparent;
-    }
-    .trl-btn-secondary {
-      background: transparent;
-      color: var(--trl-btn-accent);
-      border: 2px solid var(--trl-btn-accent);
-    }
-    .trl-btn-ghost {
-      background: transparent;
-      color: var(--trl-btn-accent);
-      border: 2px solid transparent;
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    .trl-btn-ghost:hover { background: var(--trl-btn-accent-10); box-shadow: none; filter: none; }
-    .trl-btn-danger {
-      background: #ef4444;
-      color: #fff;
-      border: 2px solid transparent;
-    }
-    .trl-btn-icon {
-      display: inline-flex;
-      flex-shrink: 0;
-      align-items: center;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-btn-row { transition: none; opacity: 1; }
-      .trl-btn-btn { transition: none; }
-    }
-  `);
+  injectOnce('trl-btn-styles', styles);
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────

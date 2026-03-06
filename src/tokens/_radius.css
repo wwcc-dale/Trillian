@@ -1,0 +1,11 @@
+/* ── Border-radius tokens ────────────────────────────────────────────────────
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --trl-radius-sm:   5px;     /* pill */
+  --trl-radius-md:   8px;     /* small cards, pills with more padding */
+  --trl-radius-lg:   10px;    /* step items, accordion rows */
+  --trl-radius-xl:   12px;    /* carousel, lightbox image, code blocks */
+  --trl-radius-2xl:  16px;    /* pace/progress dashboard cards */
+  --trl-radius-full: 9999px;  /* circles, fully-rounded */
+}

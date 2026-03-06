@@ -18,6 +18,7 @@
  *   so it's never actually a link on the rendered page.
  */
 import { injectOnce, watchForNew } from './utils.js';
+import styles from './pill.css';
 
 // ── Palette ───────────────────────────────────────────────────────────────
 
@@ -36,25 +37,7 @@ const PALETTE = {
 // ── Styles ────────────────────────────────────────────────────────────────
 
 function injectStyles() {
-  injectOnce('trl-pill-styles', `
-    .trl-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 0 5px;
-      border-radius: 5px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.78em;
-      font-weight: 700;
-      line-height: 1.6;
-      white-space: nowrap;
-      vertical-align: middle;
-      background: var(--trl-pill-bg);
-      color: #fff;
-      cursor: default;
-      user-select: text;
-      box-sizing: border-box;
-    }
-  `);
+  injectOnce('trl-pill-styles', styles);
 }
 
 // ── Identify + init ───────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-import { readdirSync, writeFileSync, mkdirSync } from 'fs';
+import { readdirSync, mkdirSync } from 'fs';
 
 const watching = process.argv.includes('--watch');
 const banner   = '/* Trillian — Canvas LMS component library | github.com/wwcc-dale/trillian */';
@@ -18,32 +18,29 @@ const sharedConfig = {
   minify:  true,
   target:  ['es2017'],
   banner:  { js: banner },
+  loader:  { '.css': 'text' },
+};
+
+const cssConfig = {
+  bundle:  true,
+  minify:  true,
+  banner:  { css: banner },
 };
 
 if (watching) {
-  // Watch mode — rebuild on change
-  const [ctxComponents, ctxBundle] = await Promise.all([
+  const [ctxComponents, ctxBundle, ctxCss] = await Promise.all([
     esbuild.context({ ...sharedConfig, entryPoints: componentEntries, outdir: 'components' }),
-    esbuild.context({ ...sharedConfig, entryPoints: ['src/index.js'], outfile: 'dist/trillian.js' }),
+    esbuild.context({ ...sharedConfig, entryPoints: ['src/index.js'],  outfile: 'dist/trillian.js' }),
+    esbuild.context({ ...cssConfig,    entryPoints: ['src/index.css'], outfile: 'dist/trillian.css' }),
   ]);
-  await Promise.all([ctxComponents.watch(), ctxBundle.watch()]);
+  await Promise.all([ctxComponents.watch(), ctxBundle.watch(), ctxCss.watch()]);
   console.log('Watching for changes…');
 } else {
-  // One-shot build
   await Promise.all([
-    // Minified individual files → components/  (same path, same interface)
-    esbuild.build({ ...sharedConfig, entryPoints: componentEntries, outdir: 'components' }),
-    // Combined bundle → dist/trillian.js  (Canvas theme JS slot)
-    esbuild.build({ ...sharedConfig, entryPoints: ['src/index.js'], outfile: 'dist/trillian.js' }),
+    esbuild.build({ ...sharedConfig, entryPoints: componentEntries,  outdir: 'components' }),
+    esbuild.build({ ...sharedConfig, entryPoints: ['src/index.js'],  outfile: 'dist/trillian.js' }),
+    esbuild.build({ ...cssConfig,    entryPoints: ['src/index.css'], outfile: 'dist/trillian.css' }),
   ]);
-
-  // CSS placeholder — Canvas theme CSS slot, available for custom overrides
-  writeFileSync('dist/trillian.css', [
-    '/* Trillian — Canvas theme CSS',
-    '   Component styles are injected at runtime by trillian.js.',
-    '   Add site-wide overrides here if needed. */',
-    '',
-  ].join('\n'));
 
   console.log('Build complete.');
   console.log('  Canvas theme JS  →  dist/trillian.js');

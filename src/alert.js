@@ -9,6 +9,7 @@
  * Types: info | warning | success | error | tip
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './alert.css';
 
 const THEMES = {
   info:    { bg: '#eff6ff', border: '#3b82f6', text: '#1e3a5f', icon: '#3b82f6', label: 'Info' },
@@ -27,33 +28,7 @@ const ICONS = {
 };
 
 function injectStyles() {
-  injectOnce('trl-alert-styles', `
-    .trl-alert-callout {
-      display: flex;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 10px;
-      border-left: 4px solid var(--trl-alert-border);
-      background: var(--trl-alert-bg);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--trl-alert-text);
-      box-sizing: border-box;
-      margin: 8px 0;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .trl-alert-callout.trl-alert-in { opacity: 1; }
-    .trl-alert-icon-wrap { flex-shrink: 0; color: var(--trl-alert-icon); padding-top: 1px; }
-    .trl-alert-body { flex: 1; min-width: 0; }
-    .trl-alert-body p { margin: 0; }
-    .trl-alert-body p + p { margin-top: 5px; }
-    .trl-alert-body a { color: var(--trl-alert-icon); }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-alert-callout { transition: none; opacity: 1; }
-    }
-  `);
+  injectOnce('trl-alert-styles', styles);
 }
 
 function isAlert(bq) {

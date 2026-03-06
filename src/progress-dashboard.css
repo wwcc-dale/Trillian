@@ -1,0 +1,153 @@
+/* ── Progress Dashboard ─────────────────────────────────────────────────────── */
+/* NOTE: Some values (RING, SW, TRACK, etc.) are numeric constants from progress-dashboard.js.
+   The computed pixel values below match those constants. If JS geometry constants change,
+   update the matching values here too. RING=168, SW=20, R=74, CIRC≈464.85, TRACK≈387.37 */
+
+.trillian {
+  .trl-dash-widget {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .trl-dash-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 36px;
+    background: var(--trl-dash-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.08);
+    max-width: 640px;
+    width: 100%;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .trl-dash-card.trl-dash-visible { opacity: 1; transform: translateY(0); }
+  .trl-dash-header { display: flex; flex-direction: column; gap: 4px; }
+  .trl-dash-heading {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #333;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .trl-dash-heading .trl-dash-code {
+    font-size: 0.55em;
+    font-weight: 500;
+    color: #aaa;
+    letter-spacing: 0.04em;
+    margin-left: 0.5em;
+    vertical-align: middle;
+  }
+  .trl-dash-session-heading {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #aaa;
+    letter-spacing: 0.01em;
+  }
+  .trl-dash-session-heading .trl-dash-part { font-size: 0.9em; }
+  .trl-dash-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 36px;
+  }
+  .trl-dash-body.trl-dash-col { flex-direction: column; }
+  .trl-dash-gauge-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .trl-dash-gauge-wrap {
+    position: relative;
+    width: 168px;
+    height: 168px;
+  }
+  .trl-dash-gauge-wrap svg { display: block; overflow: visible; }
+  .trl-dash-track {
+    fill: none;
+    stroke: var(--trl-dash-track);
+    stroke-width: 20;
+    stroke-linecap: round;
+    stroke-dasharray: 387.37 77.48;
+  }
+  .trl-dash-arc {
+    fill: none;
+    stroke: var(--trl-dash-accent);
+    stroke-width: 20;
+    stroke-linecap: round;
+    stroke-dasharray: 464.85;
+    stroke-dashoffset: 464.85;
+    transition: stroke-dashoffset 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 0 4px var(--trl-dash-accent-55));
+  }
+  .trl-dash-arc.trl-dash-glow { animation: trl-dash-glow 1.2s ease-out forwards; }
+  .trl-dash-centre {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .trl-dash-credit-num {
+    font-size: 77px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--trl-dash-accent);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .trl-dash-credit-lbl {
+    font-size: 12px;
+    font-weight: 700;
+    color: #bbb;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .trl-dash-bars-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .trl-dash-bar-group { display: flex; flex-direction: column; gap: 7px; }
+  .trl-dash-bar-header { display: flex; align-items: baseline; gap: 8px; }
+  .trl-dash-bar-name  { font-size: 13px; font-weight: 600; color: #333; }
+  .trl-dash-bar-title { font-size: 11px; font-weight: 400; color: #aaa; }
+  .trl-dash-bar-track {
+    height: 10px;
+    background: var(--trl-dash-track);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .trl-dash-bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .trl-dash-bar-fill.trl-dash-mini   { background: linear-gradient(90deg, var(--trl-dash-accent-60), var(--trl-dash-accent)); }
+  .trl-dash-bar-fill.trl-dash-cert   { background: linear-gradient(90deg, var(--trl-dash-cert-60),   var(--trl-dash-cert));   }
+  .trl-dash-bar-fill.trl-dash-degree { background: linear-gradient(90deg, var(--trl-dash-degree-60), var(--trl-dash-degree)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trl-dash-card, .trl-dash-arc, .trl-dash-bar-fill { transition: none; }
+    .trl-dash-card { opacity: 1; transform: none; }
+  }
+}
+
+@keyframes trl-dash-glow {
+  0%   { filter: drop-shadow(0 0  4px var(--trl-dash-accent-55)); }
+  40%  { filter: drop-shadow(0 0 12px var(--trl-dash-accent-85)); }
+  100% { filter: drop-shadow(0 0  5px var(--trl-dash-accent-55)); }
+}

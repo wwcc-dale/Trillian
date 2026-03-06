@@ -1,0 +1,53 @@
+/* ── Color tokens ────────────────────────────────────────────────────────────
+   Semantic palette used across all Trillian components.
+   Named to match the pill/stat-row color vocabulary so authors use consistent
+   names in both markup and CSS.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* CSS bundle sentinel — injectOnce() is a no-op when this is '1' */
+  --trl-css-loaded: 1;
+
+  /* Brand palette */
+  --trl-color-accent:  #4a90d9;
+  --trl-color-info:    #3b82f6;
+  --trl-color-success: #22c55e;
+  --trl-color-warning: #f59e0b;
+  --trl-color-error:   #ef4444;
+  --trl-color-tip:     #a855f7;
+  --trl-color-cert:    #7b68ee;
+  --trl-color-degree:  #e8a838;
+  --trl-color-neutral: #888888;
+
+  /* Pace zone colors (mirror brand palette) */
+  --trl-pace-way-behind: var(--trl-color-error);
+  --trl-pace-behind:     var(--trl-color-warning);
+  --trl-pace-on-track:   var(--trl-color-success);
+  --trl-pace-ahead:      var(--trl-color-info);
+  --trl-pace-way-ahead:  var(--trl-color-tip);
+
+  /* Text hierarchy */
+  --trl-text-primary:   #222222;
+  --trl-text-secondary: #555555;
+  --trl-text-muted:     #aaaaaa;
+  --trl-text-dim:       #bbbbbb;
+  --trl-text-label:     #cccccc;
+  --trl-text-inverse:   #ffffff;
+
+  /* Surfaces */
+  --trl-bg-card:    #ffffff;
+  --trl-bg-subtle:  #f8f8f8;
+  --trl-bg-muted:   #f4f4f4;
+  --trl-bg-hover:   rgba(0, 0, 0, 0.04);
+  --trl-bg-overlay: rgba(0, 0, 0, 0.88);
+
+  /* Borders */
+  --trl-border-subtle:  #f0f0f0;
+  --trl-border-light:   #e8e8e8;
+  --trl-border-default: #dddddd;
+
+  /* Component-specific */
+  --trl-gauge-track:      #e8e4df;
+  --trl-code-bg:          #1a1b26;
+  --trl-code-text:        #a9b1d6;
+}

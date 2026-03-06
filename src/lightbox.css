@@ -1,0 +1,58 @@
+/* ── Lightbox ────────────────────────────────────────────────────────────────── */
+/* NOTE: Not scoped to .trillian — overlay lives at document.body level. */
+
+.trl-lb-trigger {
+  cursor: zoom-in;
+}
+.trl-lb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.trl-lb-overlay.trl-lb-open { opacity: 1; pointer-events: auto; }
+.trl-lb-img {
+  max-width: 92vw;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6);
+  transform: scale(0.94);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.trl-lb-overlay.trl-lb-open .trl-lb-img { transform: scale(1); }
+.trl-lb-caption {
+  color: rgba(255, 255, 255, 0.65);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  max-width: 640px;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 24px;
+}
+.trl-lb-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.trl-lb-close:hover { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trl-lb-overlay { transition: none; }
+  .trl-lb-img { transition: none; transform: none; }
+}

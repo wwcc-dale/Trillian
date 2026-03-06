@@ -86,12 +86,20 @@ export function scopeCSS(css, scope = '.trillian') {
   });
 }
 
-/** Inject a scoped <style> block exactly once, guarded by id. */
+/**
+ * Inject a <style> block exactly once, guarded by id.
+ * CSS must be pre-scoped (include `.trillian { }` wrapper).
+ * When `dist/trillian.css` is loaded it sets `--trl-css-loaded: 1` on :root,
+ * causing this function to be a no-op — styles are already present via the
+ * external stylesheet and don't need runtime injection.
+ */
 export function injectOnce(id, css) {
   if (document.getElementById(id)) return;
+  if (getComputedStyle(document.documentElement)
+        .getPropertyValue('--trl-css-loaded').trim() === '1') return;
   const s = document.createElement('style');
   s.id = id;
-  s.textContent = scopeCSS(css);
+  s.textContent = css;
   document.head.appendChild(s);
 }
 

@@ -1,0 +1,16 @@
+/* ── Spacing tokens ──────────────────────────────────────────────────────────
+   4px base unit. Components use these for padding, gap, and margin.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --trl-space-1:  4px;
+  --trl-space-2:  8px;
+  --trl-space-3:  12px;
+  --trl-space-4:  16px;
+  --trl-space-5:  20px;
+  --trl-space-6:  24px;
+  --trl-space-7:  28px;
+  --trl-space-8:  32px;
+  --trl-space-10: 40px;
+  --trl-space-12: 48px;
+}

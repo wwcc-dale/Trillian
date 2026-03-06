@@ -27,6 +27,7 @@
  *   - End of parent container
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
+import styles from './flow-panels.css';
 
 const ACCORD_MARKER = 'flow-accordion';
 const TABS_MARKER   = 'flow-tabs';
@@ -35,118 +36,8 @@ const CHEVRON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" ari
 
 // ── Styles ─────────────────────────────────────────────────────────────────
 
-function injectAccordionStyles() {
-  injectOnce('trl-fac-styles', `
-    .trl-fac-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      border: 1px solid #ebebeb;
-      border-radius: 12px;
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-fac-widget.trl-fac-in { opacity: 1; }
-    .trl-fac-item { border-bottom: 1px solid #f0f0f0; }
-    .trl-fac-item:last-child { border-bottom: none; }
-    .trl-fac-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      width: 100%;
-      padding: 16px 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      color: #222;
-      text-align: left;
-      transition: background 0.15s;
-    }
-    .trl-fac-trigger:hover { background: #fafafa; }
-    .trl-fac-trigger:focus-visible { outline: 2px solid var(--trl-fac-accent); outline-offset: -2px; }
-    .trl-fac-chevron {
-      flex-shrink: 0;
-      color: #bbb;
-      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .trl-fac-trigger[aria-expanded="true"] .trl-fac-chevron { transform: rotate(180deg); }
-    .trl-fac-panel {
-      overflow: hidden;
-      height: 0;
-      transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .trl-fac-panel-inner {
-      padding: 4px 20px 20px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #444;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-fac-widget { transition: none; opacity: 1; }
-      .trl-fac-panel, .trl-fac-chevron { transition: none; }
-    }
-  `);
-}
-
-function injectTabsStyles() {
-  injectOnce('trl-fta-styles', `
-    .trl-fta-widget {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fff;
-      border: 1px solid #ebebeb;
-      border-radius: 12px;
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .trl-fta-widget.trl-fta-in { opacity: 1; }
-    .trl-fta-tablist {
-      display: flex;
-      border-bottom: 1px solid #f0f0f0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .trl-fta-tablist::-webkit-scrollbar { display: none; }
-    .trl-fta-tab {
-      flex-shrink: 0;
-      padding: 14px 20px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -1px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      color: #999;
-      transition: color 0.2s, border-color 0.2s;
-      white-space: nowrap;
-    }
-    .trl-fta-tab:hover { color: #555; }
-    .trl-fta-tab:focus-visible { outline: 2px solid var(--trl-fta-accent); outline-offset: -2px; }
-    .trl-fta-tab[aria-selected="true"] {
-      color: var(--trl-fta-accent);
-      border-bottom-color: var(--trl-fta-accent);
-    }
-    .trl-fta-panels { padding: 20px; }
-    .trl-fta-panel {
-      display: none;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #444;
-      animation: trl-fta-fade 0.18s ease;
-    }
-    .trl-fta-panel.trl-fta-active { display: block; }
-    @keyframes trl-fta-fade { from { opacity: 0; } to { opacity: 1; } }
-    @media (prefers-reduced-motion: reduce) {
-      .trl-fta-widget { transition: none; opacity: 1; }
-      .trl-fta-tab { transition: none; }
-      @keyframes trl-fta-fade { from { opacity: 1; } }
-    }
-  `);
+function injectStyles() {
+  injectOnce('trl-flow-styles', styles);
 }
 
 // ── DOM collection ──────────────────────────────────────────────────────────
@@ -358,13 +249,13 @@ function initOne(ul) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let widget;
 
+  injectStyles();
+
   if (mode === 'accordion') {
-    injectAccordionStyles();
     widget = buildAccordion(sections, reduced, uid);
     ul.replaceWith(widget);
     onVisible(widget, () => widget.classList.add('trl-fac-in'));
   } else {
-    injectTabsStyles();
     widget = buildTabs(sections, uid);
     ul.replaceWith(widget);
     onVisible(widget, () => widget.classList.add('trl-fta-in'));

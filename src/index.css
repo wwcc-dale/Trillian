@@ -1,0 +1,50 @@
+/* ── Trillian design system — CSS entry point ────────────────────────────────
+   Bundles to dist/trillian.css (Canvas theme CSS slot).
+
+   Layer order: tokens first, then components. Page-level overrides can target
+   any component layer by name, e.g.:
+     @layer trl.alert { .trillian .trl-alert-callout { border-radius: 0; } }
+
+   When this file is loaded, --trl-css-loaded: 1 is set on :root, and
+   injectOnce() in standalone IIFEs becomes a no-op — no double-injection.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@layer trl.tokens,
+       trl.alert,
+       trl.pill,
+       trl.checklist,
+       trl.buttons,
+       trl.accordion,
+       trl.tabs,
+       trl.stat-row,
+       trl.lightbox,
+       trl.flow-panels,
+       trl.code-highlight,
+       trl.steps,
+       trl.carousel,
+       trl.progress-dashboard,
+       trl.pace-dashboard;
+
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+@import './tokens/_color.css'  layer(trl.tokens);
+@import './tokens/_type.css'   layer(trl.tokens);
+@import './tokens/_space.css'  layer(trl.tokens);
+@import './tokens/_radius.css' layer(trl.tokens);
+@import './tokens/_shadow.css' layer(trl.tokens);
+@import './tokens/_motion.css' layer(trl.tokens);
+
+/* ── Components ─────────────────────────────────────────────────────────── */
+@import './alert.css'                layer(trl.alert);
+@import './pill.css'                 layer(trl.pill);
+@import './checklist.css'            layer(trl.checklist);
+@import './buttons.css'              layer(trl.buttons);
+@import './accordion.css'            layer(trl.accordion);
+@import './tabs.css'                 layer(trl.tabs);
+@import './stat-row.css'             layer(trl.stat-row);
+@import './lightbox.css'             layer(trl.lightbox);
+@import './flow-panels.css'          layer(trl.flow-panels);
+@import './code-highlight.css'       layer(trl.code-highlight);
+@import './steps.css'                layer(trl.steps);
+@import './carousel.css'             layer(trl.carousel);
+@import './progress-dashboard.css'   layer(trl.progress-dashboard);
+@import './pace-dashboard.css'       layer(trl.pace-dashboard);
