@@ -1,24 +1,39 @@
 /**
  * Pace Dashboard
  *
- * Shows a student's learning pace relative to the expected course timeline,
- * a projected completion date, and optional on/off-track vs a target date.
+ * Shows a student's reading rate relative to the expected course timeline,
+ * projects a course completion date, and optionally shows on/off-track vs a
+ * target date. Can also project program milestone dates (short cert, cert,
+ * degree) based on the student's credit accumulation rate.
  *
- * Reads two metrics logged by page-tracker.js:
- *   Level 1 — visited   : 45 s of visible time on the page
- *   Level 2 — completed : visited + scrolled ≥ 85% + all tabs viewed
+ * The gauge measures RATE (actual pages/day ÷ required pages/day), not raw
+ * progress. pace = 1.0 means the student is reading at exactly the required
+ * rate to finish on time.
  *
  * Markup (markdown):
+ *   Course pace (required):
  *   - pace-dashboard
- *   - total-pages:  48
- *   - start-date:   2025-01-13
- *   - end-date:     2025-05-02
- *   - target-date:  2025-04-01    ← optional: on/off-track pill
- *   - pace-metric:  completed     ← optional: 'visited' (default) or 'completed'
+ *   - total-pages:        48
+ *   - start-date:         2026-01-05
+ *   - end-date:           2026-05-01
+ *   - target-date:        2026-04-15   ← optional: on/off-track pill vs this date
+ *   - pace-metric:        counted      ← optional: visited | counted (default) | completed
+ *   - course-id:          demo         ← optional: override ENV.COURSE_ID for storage key
+ *   - user-id:            demo         ← optional: override ENV.current_user_id
  *
- * Storage keys (written by page-tracker.js):
- *   trl-pace-log-{courseId}-{userId}  → [{url, t}, ...]  Level 1 visits
- *   trl-pace-done-{courseId}-{userId} → [url, ...]        Level 2 completions
+ *   Program outlook (all optional — section hidden if program-start-date absent):
+ *   - program-start-date: 2025-09-01   ← when the student entered the program
+ *   - credits-earned:     15           ← credits fully completed before this course
+ *   - credits-per-course: 5            ← credit value of current course
+ *   - milestone-mini:     20           ← credits required for short certificate
+ *   - milestone-cert:     45           ← credits required for certificate
+ *   - milestone-degree:   90           ← credits required for AAS degree
+ *   - program-short-name: Graphic Design Essentials
+ *   - program-cert-name:  Digital Design
+ *   - program-degree-name: Graphic Design & Web Development
+ *
+ * Storage (written by page-tracker.js):
+ *   trl-pace-data-{courseId}-{userId} → [{url, t, vs, ss, ts}]
  */
 import { injectOnce, onVisible, watchForNew } from './utils.js';
 
@@ -204,6 +219,54 @@ function injectStyles() {
     }
     .trl-pace-track-yes { background: #f0fdf4; color: #15803d; }
     .trl-pace-track-no  { background: #fef2f2; color: #b91c1c; }
+    .trl-pace-program {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .trl-pace-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ccc;
+      margin: 0 0 2px;
+    }
+    .trl-pace-milestone {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      gap: 8px;
+    }
+    .trl-pace-milestone-name {
+      color: #aaa;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trl-pace-milestone-name strong {
+      display: block;
+      font-weight: 600;
+      color: #555;
+      font-size: 11px;
+    }
+    .trl-pace-milestone-date {
+      font-weight: 600;
+      color: #222;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .trl-pace-milestone-done {
+      font-weight: 600;
+      color: #22c55e;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
     @media (prefers-reduced-motion: reduce) {
       .trl-pace-widget { transition: none; opacity: 1; }
     }
@@ -342,6 +405,75 @@ function initOne(ul) {
   }
 
   wrap.appendChild(stats);
+
+  // ── Program outlook ─────────────────────────────────────────────────────────
+  // Requires: program-start-date + credits-earned. All milestone keys optional.
+  // Credit accumulation rate uses completed credits + fractional current course.
+  // totalCredits = creditsEarned + (pagesUsed / totalPages) × creditsPerCourse
+
+  const programStartDate  = parseDate(cfg['program-start-date'] || '');
+  const creditsEarned     = parseFloat(cfg['credits-earned']     || 'NaN');
+  const creditsPerCourse  = parseFloat(cfg['credits-per-course'] || '0');
+
+  if (programStartDate && !isNaN(creditsEarned)) {
+    const partialCredit   = totalPages > 0 ? (pagesUsed / totalPages) * creditsPerCourse : 0;
+    const totalCredits    = creditsEarned + partialCredit;
+    const progDaysElapsed = Math.max(1, (now - programStartDate.getTime()) / 86400000);
+    const creditRate      = totalCredits / progDaysElapsed; // credits per day
+
+    const MILESTONES = [
+      { key: 'milestone-mini',   nameKey: 'program-short-name',   label: 'Short Certificate' },
+      { key: 'milestone-cert',   nameKey: 'program-cert-name',    label: 'Certificate'       },
+      { key: 'milestone-degree', nameKey: 'program-degree-name',  label: 'AAS Degree'        },
+    ];
+
+    const programRows = MILESTONES
+      .map(m => ({ ...m, threshold: parseFloat(cfg[m.key] || 'NaN'), name: cfg[m.nameKey] || '' }))
+      .filter(m => !isNaN(m.threshold) && m.name);
+
+    if (programRows.length) {
+      const prog = document.createElement('div');
+      prog.className = 'trl-pace-program';
+
+      const sectionLbl = document.createElement('p');
+      sectionLbl.className = 'trl-pace-section-label';
+      sectionLbl.textContent = 'Program Outlook';
+      prog.appendChild(sectionLbl);
+
+      programRows.forEach(m => {
+        const r = document.createElement('div');
+        r.className = 'trl-pace-milestone';
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'trl-pace-milestone-name';
+        const strong = document.createElement('strong');
+        strong.textContent = m.name;
+        nameEl.appendChild(strong);
+        nameEl.appendChild(document.createTextNode(m.label));
+
+        const dateEl = document.createElement('span');
+        if (totalCredits >= m.threshold) {
+          dateEl.className = 'trl-pace-milestone-done';
+          dateEl.textContent = '✓ Reached';
+        } else {
+          dateEl.className = 'trl-pace-milestone-date';
+          if (creditRate > 0) {
+            const daysToGo = (m.threshold - totalCredits) / creditRate;
+            dateEl.textContent = fmt(new Date(now + daysToGo * 86400000));
+          } else {
+            dateEl.textContent = '—';
+          }
+        }
+
+        r.appendChild(nameEl);
+        r.appendChild(dateEl);
+        prog.appendChild(r);
+      });
+
+      wrap.appendChild(prog);
+    }
+  }
+
   ul.replaceWith(wrap);
 
   // Animate arc + needle in when visible
