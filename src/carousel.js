@@ -2,7 +2,7 @@
  * Carousel
  *
  * Left/right arrow carousel supporting image slides (auto-lightboxed by
- * lightbox.js) and arbitrary card content. Keyboard and touch-swipe nav.
+ * lightbox.js) and card content. Keyboard and touch-swipe nav.
  *
  * Markup:
  *   - carousel
@@ -15,6 +15,18 @@
  * Images inside slides are automatically picked up by lightbox.js.
  * Keyboard: focus the carousel, then use left/right arrow keys.
  * Touch: swipe left/right.
+ *
+ * ── Content limitations ───────────────────────────────────────────────────
+ * Slide content is drawn from <li> items, so each slide is limited to what
+ * markdown can express inside a list item: inline text, bold/italic, a single
+ * nested bullet list, or a single image. Block-level Trillian components
+ * (stat-row, steps, tabs, accordion, etc.) cannot be reliably composed inside
+ * a carousel slide via inline markup.
+ *
+ * For slides requiring rich composed content, use flow-accordion or flow-tabs
+ * in combination with Zaphod {{include:}} directives — each include file can
+ * contain any Trillian components, and the flow-* components collect arbitrary
+ * DOM siblings rather than being constrained to <li> nesting.
  */
 import { injectOnce, watchForNew } from './utils.js';
 
