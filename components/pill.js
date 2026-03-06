@@ -3,7 +3,7 @@
     .trl-pill {
       display: inline-flex;
       align-items: center;
-      padding: 1px 4px;
+      padding: 0 5px;
       border-radius: 5px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 0.78em;
