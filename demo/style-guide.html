@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trillian — Design System Style Guide</title>
+  <link rel="stylesheet" href="../dist/trillian.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── Page shell ─────────────────────────────────────────────────────────── */
+    :root {
+      --sg-bg:        #f0f0f0;
+      --sg-nav-bg:    #1a1a1a;
+      --sg-nav-w:     220px;
+      --sg-content:   860px;
+      --sg-mono:      'SF Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+    }
+
+    body {
+      margin: 0;
+      background: var(--sg-bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Left nav ───────────────────────────────────────────────────────────── */
+    .sg-nav {
+      width: var(--sg-nav-w);
+      flex-shrink: 0;
+      background: var(--sg-nav-bg);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      padding: 28px 0 40px;
+      z-index: 100;
+    }
+    .sg-nav-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #2a2a2a;
+      margin-bottom: 16px;
+    }
+    .sg-nav-logo strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .sg-nav-logo span { font-size: 11px; color: #666; }
+    .sg-nav-group { margin-bottom: 8px; }
+    .sg-nav-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #444;
+      padding: 10px 20px 4px;
+    }
+    .sg-nav a {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      padding: 5px 20px;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .sg-nav a:hover { color: #ddd; border-left-color: #333; }
+    .sg-nav a.active { color: #fff; border-left-color: #4a90d9; }
+
+    /* ── Main content ───────────────────────────────────────────────────────── */
+    .sg-main {
+      margin-left: var(--sg-nav-w);
+      flex: 1;
+      padding: 48px 48px 120px;
+      max-width: calc(var(--sg-nav-w) + var(--sg-content) + 96px);
+    }
+
+    /* ── Page title ─────────────────────────────────────────────────────────── */
+    .sg-page-title {
+      margin: 0 0 48px;
+    }
+    .sg-page-title h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #222;
+      letter-spacing: -0.03em;
+      margin: 0 0 6px;
+    }
+    .sg-page-title p { font-size: 14px; color: #888; margin: 0; }
+
+    /* ── Section ────────────────────────────────────────────────────────────── */
+    .sg-section {
+      margin-bottom: 72px;
+      scroll-margin-top: 32px;
+    }
+    .sg-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin: 0 0 28px;
+    }
+    .sg-section-subtitle {
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      margin: 28px 0 12px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Token grid ─────────────────────────────────────────────────────────── */
+    .sg-token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .sg-swatch {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .sg-swatch-color {
+      height: 56px;
+    }
+    .sg-swatch-info {
+      padding: 8px 10px 10px;
+    }
+    .sg-swatch-name {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #333;
+      font-family: var(--sg-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sg-swatch-hex {
+      display: block;
+      font-size: 10px;
+      color: #aaa;
+      font-family: var(--sg-mono);
+      margin-top: 2px;
+    }
+
+    /* ── Type scale ─────────────────────────────────────────────────────────── */
+    .sg-type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .sg-type-row:last-child { border-bottom: none; }
+    .sg-type-meta {
+      width: 180px;
+      flex-shrink: 0;
+    }
+    .sg-type-token {
+      font-size: 10px;
+      font-weight: 700;
+      color: #999;
+      font-family: var(--sg-mono);
+    }
+    .sg-type-size { font-size: 10px; color: #bbb; margin-top: 2px; }
+    .sg-type-sample { color: #222; }
+
+    /* ── Spacing scale ──────────────────────────────────────────────────────── */
+    .sg-space-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 6px 0;
+    }
+    .sg-space-label {
+      width: 140px;
+      flex-shrink: 0;
+      font-size: 10px;
+      font-family: var(--sg-mono);
+      color: #999;
+    }
+    .sg-space-bar {
+      height: 24px;
+      background: #4a90d9;
+      border-radius: 4px;
+      opacity: 0.7;
+    }
+    .sg-space-val { font-size: 10px; color: #bbb; }
+
+    /* ── Radius scale ───────────────────────────────────────────────────────── */
+    .sg-radius-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .sg-radius-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .sg-radius-box {
+      width: 64px;
+      height: 64px;
+      background: #4a90d9;
+      opacity: 0.7;
+    }
+    .sg-radius-label { font-size: 10px; color: #888; font-family: var(--sg-mono); text-align: center; }
+
+    /* ── Shadow scale ───────────────────────────────────────────────────────── */
+    .sg-shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .sg-shadow-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 16px 16px;
+    }
+    .sg-shadow-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: #aaa;
+      font-family: var(--sg-mono);
+      margin-bottom: 4px;
+    }
+
+    /* ── Motion ─────────────────────────────────────────────────────────────── */
+    .sg-motion-grid { display: flex; flex-direction: column; gap: 12px; }
+    .sg-motion-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .sg-motion-label {
+      width: 200px;
+      flex-shrink: 0;
+      font-size: 10px;
+      font-family: var(--sg-mono);
+      color: #999;
+    }
+    .sg-motion-track {
+      flex: 1;
+      height: 6px;
+      background: #e8e8e8;
+      border-radius: 3px;
+      position: relative;
+      overflow: visible;
+    }
+    .sg-motion-dot {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 14px;
+      height: 14px;
+      margin-top: -7px;
+      margin-left: -7px;
+      border-radius: 50%;
+      background: #4a90d9;
+      cursor: pointer;
+    }
+    .sg-motion-dot:hover { animation: var(--sg-anim); }
+    .sg-motion-val { font-size: 10px; color: #bbb; width: 60px; }
+
+    /* ── Component demo block ───────────────────────────────────────────────── */
+    .sg-component { margin-bottom: 60px; }
+    .sg-component-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .sg-component-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: #222;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .sg-component-file {
+      font-size: 11px;
+      color: #bbb;
+      font-family: var(--sg-mono);
+    }
+    .sg-component-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin: 0 0 20px;
+      max-width: 600px;
+    }
+
+    .sg-demo-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+    .sg-demo-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 8px;
+    }
+
+    .sg-preview {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      min-height: 60px;
+    }
+    .sg-preview-dark {
+      background: #1a1a1a;
+    }
+    .sg-preview-inline { padding: 20px 24px; }
+
+    .sg-code {
+      background: #1e1e2e;
+      border-radius: 12px;
+      padding: 16px 18px;
+      overflow-x: auto;
+    }
+    .sg-code pre {
+      margin: 0;
+      font-family: var(--sg-mono);
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: #cdd6f4;
+      white-space: pre;
+    }
+    /* Minimal inline syntax highlights */
+    .sg-code .cm  { color: #6c7086; }  /* comment */
+    .sg-code .kw  { color: #cba6f7; }  /* keyword / marker */
+    .sg-code .st  { color: #a6e3a1; }  /* string value */
+    .sg-code .pu  { color: #89dceb; }  /* punctuation / key */
+
+    /* ── API table ──────────────────────────────────────────────────────────── */
+    .sg-api {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+    .sg-api th {
+      text-align: left;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #bbb;
+      padding: 6px 12px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .sg-api td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: top;
+      color: #444;
+      line-height: 1.5;
+    }
+    .sg-api tr:last-child td { border-bottom: none; }
+    .sg-api code {
+      font-family: var(--sg-mono);
+      font-size: 11px;
+      background: #f0f0f0;
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #333;
+    }
+
+    /* ── Variant label ──────────────────────────────────────────────────────── */
+    .sg-variant {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin: 24px 0 10px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────────────────── */
+    .sg-footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+      font-size: 11px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Left nav ──────────────────────────────────────────────────────────────── -->
+<nav class="sg-nav" aria-label="Style guide navigation">
+  <div class="sg-nav-logo">
+    <strong>Trillian</strong>
+    <span>Design System</span>
+  </div>
+
+  <div class="sg-nav-group">
+    <span class="sg-nav-label">Design Tokens</span>
+    <a href="#color">Color</a>
+    <a href="#typography">Typography</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#radius">Border Radius</a>
+    <a href="#shadow">Shadows</a>
+    <a href="#motion">Motion</a>
+  </div>
+
+  <div class="sg-nav-group">
+    <span class="sg-nav-label">Components</span>
+    <a href="#c-alert">Alert</a>
+    <a href="#c-pill">Pill</a>
+    <a href="#c-checklist">Checklist</a>
+    <a href="#c-buttons">Buttons</a>
+    <a href="#c-accordion">Accordion</a>
+    <a href="#c-tabs">Tabs</a>
+    <a href="#c-stat-row">Stat Row</a>
+    <a href="#c-steps">Steps</a>
+    <a href="#c-carousel">Carousel</a>
+    <a href="#c-flow-accordion">Flow Accordion</a>
+    <a href="#c-flow-tabs">Flow Tabs</a>
+    <a href="#c-lightbox">Lightbox</a>
+    <a href="#c-code">Code Highlight</a>
+  </div>
+
+  <div class="sg-nav-group">
+    <span class="sg-nav-label">Dashboards</span>
+    <a href="#c-progress">Progress Dashboard</a>
+    <a href="#c-pace">Pace Dashboard</a>
+  </div>
+</nav>
+
+<!-- ── Main ──────────────────────────────────────────────────────────────────── -->
+<main class="sg-main">
+
+  <div class="sg-page-title">
+    <h1>Trillian Design System</h1>
+    <p>Canvas LMS component library — design tokens, component API, and usage patterns.</p>
+  </div>
+
+  <!-- ── Color ──────────────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="color">
+    <h2 class="sg-section-title">Color</h2>
+
+    <p class="sg-section-subtitle">Brand palette</p>
+    <div class="sg-token-grid">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#4a90d9"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-accent</span><span class="sg-swatch-hex">#4a90d9</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#3b82f6"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-info</span><span class="sg-swatch-hex">#3b82f6</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#22c55e"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-success</span><span class="sg-swatch-hex">#22c55e</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#f59e0b"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-warning</span><span class="sg-swatch-hex">#f59e0b</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#ef4444"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-error</span><span class="sg-swatch-hex">#ef4444</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#a855f7"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-tip</span><span class="sg-swatch-hex">#a855f7</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#7b68ee"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-cert</span><span class="sg-swatch-hex">#7b68ee</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#e8a838"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-degree</span><span class="sg-swatch-hex">#e8a838</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#888888"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-color-neutral</span><span class="sg-swatch-hex">#888888</span></div></div>
+    </div>
+
+    <p class="sg-section-subtitle">Text hierarchy</p>
+    <div class="sg-token-grid">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#222222"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-primary</span><span class="sg-swatch-hex">#222222</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#555555"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-secondary</span><span class="sg-swatch-hex">#555555</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#aaaaaa"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-muted</span><span class="sg-swatch-hex">#aaaaaa</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#bbbbbb"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-dim</span><span class="sg-swatch-hex">#bbbbbb</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#cccccc"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-label</span><span class="sg-swatch-hex">#cccccc</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#ffffff; outline: 1px solid #eee;"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-text-inverse</span><span class="sg-swatch-hex">#ffffff</span></div></div>
+    </div>
+
+    <p class="sg-section-subtitle">Surfaces</p>
+    <div class="sg-token-grid">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#ffffff; outline: 1px solid #eee;"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-bg-card</span><span class="sg-swatch-hex">#ffffff</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#f8f8f8"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-bg-subtle</span><span class="sg-swatch-hex">#f8f8f8</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#f4f4f4"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-bg-muted</span><span class="sg-swatch-hex">#f4f4f4</span></div></div>
+    </div>
+
+    <p class="sg-section-subtitle">Borders</p>
+    <div class="sg-token-grid">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#f0f0f0"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-border-subtle</span><span class="sg-swatch-hex">#f0f0f0</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#e8e8e8"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-border-light</span><span class="sg-swatch-hex">#e8e8e8</span></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#dddddd"></div><div class="sg-swatch-info"><span class="sg-swatch-name">--trl-border-default</span><span class="sg-swatch-hex">#dddddd</span></div></div>
+    </div>
+  </section>
+
+  <!-- ── Typography ─────────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="typography">
+    <h2 class="sg-section-title">Typography</h2>
+
+    <p class="sg-section-subtitle">Type scale</p>
+    <div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-xs</div><div class="sg-type-size">10px · 0.625rem</div></div>
+        <div class="sg-type-sample" style="font-size:10px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-sm</div><div class="sg-type-size">11px · 0.6875rem</div></div>
+        <div class="sg-type-sample" style="font-size:11px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-base</div><div class="sg-type-size">12px · 0.75rem</div></div>
+        <div class="sg-type-sample" style="font-size:12px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-md</div><div class="sg-type-size">13px · 0.8125rem</div></div>
+        <div class="sg-type-sample" style="font-size:13px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-lg</div><div class="sg-type-size">14px · 0.875rem</div></div>
+        <div class="sg-type-sample" style="font-size:14px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-xl</div><div class="sg-type-size">16px · 1rem</div></div>
+        <div class="sg-type-sample" style="font-size:16px">The quick brown fox jumps</div>
+      </div>
+      <div class="sg-type-row">
+        <div class="sg-type-meta"><div class="sg-type-token">--trl-text-2xl</div><div class="sg-type-size">22px · 1.375rem</div></div>
+        <div class="sg-type-sample" style="font-size:22px;font-weight:800;letter-spacing:-0.02em">The quick brown fox</div>
+      </div>
+    </div>
+
+    <p class="sg-section-subtitle">Font families</p>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div style="background:#fff;border-radius:10px;padding:16px 20px;flex:1;min-width:240px;box-shadow:0 1px 3px rgba(0,0,0,0.07)">
+        <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">--trl-font-sans</div>
+        <div style="font-size:18px;font-weight:700;color:#222">Aa Bb Cc Dd 0123</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px">-apple-system, BlinkMacSystemFont, Segoe UI, Roboto</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:16px 20px;flex:1;min-width:240px;box-shadow:0 1px 3px rgba(0,0,0,0.07)">
+        <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">--trl-font-mono</div>
+        <div style="font-size:16px;font-family:monospace;font-weight:600;color:#222">Aa Bb Cc Dd 0123</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px">SF Mono, Cascadia Code, Fira Code, Consolas</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Spacing ────────────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="spacing">
+    <h2 class="sg-section-title">Spacing</h2>
+    <p style="font-size:13px;color:#888;margin:0 0 20px">4px base unit. Used for padding, gap, and margin throughout components.</p>
+    <div class="sg-motion-grid">
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-1</span><div class="sg-space-bar" style="width:4px"></div><span class="sg-space-val">4px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-2</span><div class="sg-space-bar" style="width:8px"></div><span class="sg-space-val">8px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-3</span><div class="sg-space-bar" style="width:12px"></div><span class="sg-space-val">12px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-4</span><div class="sg-space-bar" style="width:16px"></div><span class="sg-space-val">16px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-5</span><div class="sg-space-bar" style="width:20px"></div><span class="sg-space-val">20px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-6</span><div class="sg-space-bar" style="width:24px"></div><span class="sg-space-val">24px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-7</span><div class="sg-space-bar" style="width:28px"></div><span class="sg-space-val">28px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-8</span><div class="sg-space-bar" style="width:32px"></div><span class="sg-space-val">32px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-10</span><div class="sg-space-bar" style="width:40px"></div><span class="sg-space-val">40px</span></div>
+      <div class="sg-space-row"><span class="sg-space-label">--trl-space-12</span><div class="sg-space-bar" style="width:48px"></div><span class="sg-space-val">48px</span></div>
+    </div>
+  </section>
+
+  <!-- ── Border Radius ──────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="radius">
+    <h2 class="sg-section-title">Border Radius</h2>
+    <div class="sg-radius-grid">
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:5px"></div><div class="sg-radius-label">--trl-radius-sm<br>5px · pill</div></div>
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:8px"></div><div class="sg-radius-label">--trl-radius-md<br>8px · cards, pills</div></div>
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:10px"></div><div class="sg-radius-label">--trl-radius-lg<br>10px · steps, rows</div></div>
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:12px"></div><div class="sg-radius-label">--trl-radius-xl<br>12px · carousel, lightbox</div></div>
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:16px"></div><div class="sg-radius-label">--trl-radius-2xl<br>16px · dashboard cards</div></div>
+      <div class="sg-radius-item"><div class="sg-radius-box" style="border-radius:9999px;width:64px;height:64px"></div><div class="sg-radius-label">--trl-radius-full<br>9999px · circles</div></div>
+    </div>
+  </section>
+
+  <!-- ── Shadows ────────────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="shadow">
+    <h2 class="sg-section-title">Shadows</h2>
+    <div class="sg-shadow-grid">
+      <div class="sg-shadow-card" style="box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.08)">
+        <div class="sg-shadow-name">--trl-shadow-card</div>
+        <div style="font-size:11px;color:#bbb">Components, panels</div>
+      </div>
+      <div class="sg-shadow-card" style="box-shadow:0 1px 4px rgba(0,0,0,.12)">
+        <div class="sg-shadow-name">--trl-shadow-btn</div>
+        <div style="font-size:11px;color:#bbb">Button resting state</div>
+      </div>
+      <div class="sg-shadow-card" style="box-shadow:0 2px 8px rgba(0,0,0,.18)">
+        <div class="sg-shadow-name">--trl-shadow-btn-hover</div>
+        <div style="font-size:11px;color:#bbb">Button hover state</div>
+      </div>
+      <div class="sg-shadow-card" style="box-shadow:0 8px 48px rgba(0,0,0,.6);background:#fff">
+        <div class="sg-shadow-name">--trl-shadow-overlay</div>
+        <div style="font-size:11px;color:#bbb">Lightbox image</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Motion ─────────────────────────────────────────────────────────────── -->
+  <section class="sg-section" id="motion">
+    <h2 class="sg-section-title">Motion</h2>
+    <p style="font-size:13px;color:#888;margin:0 0 20px">Hover a dot to animate it across its duration at the component's easing curve.</p>
+
+    <p class="sg-section-subtitle">Durations</p>
+    <div class="sg-motion-grid">
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-duration-fast · 0.15s<br><span style="color:#ccc">hover states</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.15s ease forwards"></div></div></div>
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-duration-base · 0.22s<br><span style="color:#ccc">lightbox, short transitions</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.22s ease forwards"></div></div></div>
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-duration-slow · 0.38s<br><span style="color:#ccc">carousel slide</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.38s ease forwards"></div></div></div>
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-duration-deliberate · 1.1s<br><span style="color:#ccc">gauge fill — slow, intentional</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 1.1s cubic-bezier(0.22,1,0.36,1) forwards"></div></div></div>
+    </div>
+
+    <p class="sg-section-subtitle" style="margin-top:28px">Easing</p>
+    <div class="sg-motion-grid">
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-ease-default<br><span style="color:#ccc">ease</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.6s ease forwards"></div></div></div>
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-ease-standard<br><span style="color:#ccc">cubic-bezier(0.4, 0, 0.2, 1)</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.6s cubic-bezier(0.4,0,0.2,1) forwards"></div></div></div>
+      <div class="sg-motion-row"><span class="sg-motion-label">--trl-ease-spring<br><span style="color:#ccc">cubic-bezier(0.22, 1, 0.36, 1)</span></span><div class="sg-motion-track"><div class="sg-motion-dot" style="--sg-anim:sg-slide 0.6s cubic-bezier(0.22,1,0.36,1) forwards"></div></div></div>
+    </div>
+    <style>
+      @keyframes sg-slide { to { left: calc(100% + 7px); } }
+    </style>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       COMPONENTS
+  ══════════════════════════════════════════════════════════════════════════════ -->
+
+  <h2 class="sg-section-title" style="margin-bottom:40px">Components</h2>
+
+  <!-- ── Alert ──────────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-alert">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Alert</h3>
+      <span class="sg-component-file">components/alert.js</span>
+    </div>
+    <p class="sg-component-desc">Callout boxes for info, warnings, success messages, errors, and tips. Identified by a blockquote whose first paragraph begins with <code>alert: type</code>.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <blockquote><p>alert: info</p><p>This is an info callout. Use it to highlight supporting context.</p></blockquote>
+          <blockquote><p>alert: warning</p><p>Assignment draft is due Friday. Late submissions lose 10%.</p></blockquote>
+          <blockquote><p>alert: success</p><p>Your submission was received successfully.</p></blockquote>
+          <blockquote><p>alert: error</p><p>Something went wrong. Please try again or contact support.</p></blockquote>
+          <blockquote><p>alert: tip</p><p>Pro tip: read the rubric before starting your project.</p></blockquote>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre>&gt; <span class="kw">alert: info</span>
+&gt;
+&gt; <span class="st">Your supporting context here.</span>
+
+<span class="cm"># Types: info | warning | success | error | tip</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pill ───────────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-pill">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Pill</h3>
+      <span class="sg-component-file">components/pill.js</span>
+    </div>
+    <p class="sg-component-desc">Inline non-clickable color badges. Written as a standard markdown link whose <code>href</code> is <code>#pill</code> or <code>#pill:colorname</code>. Fragment hrefs survive Canvas's sanitizer.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian" style="font-size:14px;line-height:2">
+          Status: <a href="#pill:success">Passing</a> &nbsp;
+          <a href="#pill:warning">Due Friday</a> &nbsp;
+          <a href="#pill:error">Late</a> &nbsp;
+          <a href="#pill:info">In Review</a> &nbsp;
+          <a href="#pill:tip">Optional</a> &nbsp;
+          <a href="#pill:cert">5 Credits</a> &nbsp;
+          <a href="#pill:degree">AAS</a> &nbsp;
+          <a href="#pill:neutral">Archived</a> &nbsp;
+          <a href="#pill">Default</a>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre>Status: [<span class="st">Passing</span>](<span class="kw">#pill:success</span>)
+
+[<span class="st">Due Friday</span>](<span class="kw">#pill:warning</span>)
+
+<span class="cm"># Colors: accent | info | warning | success
+#         error | tip | cert | degree | neutral</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Checklist ──────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-checklist">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Checklist</h3>
+      <span class="sg-component-file">components/checklist.js</span>
+    </div>
+    <p class="sg-component-desc">Interactive checkbox list with a progress bar. State persists in <code>localStorage</code> keyed by a hash of the title and items — survives page reload.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>checklist: Pre-Class Prep</li>
+            <li>Read Chapter 3 (pp. 45–67)</li>
+            <li>Watch the intro video (15 min)</li>
+            <li>Post to the discussion board</li>
+            <li>Review the slide deck</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">checklist: Pre-Class Prep</span>
+<span class="pu">-</span> <span class="st">Read Chapter 3 (pp. 45–67)</span>
+<span class="pu">-</span> <span class="st">Watch the intro video (15 min)</span>
+<span class="pu">-</span> <span class="st">Post to the discussion board</span>
+
+<span class="cm"># "checklist" → no title
+# "checklist: Title" → titled</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Buttons ────────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-buttons">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Buttons</h3>
+      <span class="sg-component-file">components/buttons.js</span>
+    </div>
+    <p class="sg-component-desc">A row of styled link buttons. Each item uses middle-dot (<code>·</code>) as separator: <code>label · href · style · icon · position</code>.</p>
+
+    <div class="sg-variant">Styles</div>
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>buttons</li>
+            <li>Primary · # · primary</li>
+            <li>Secondary · # · secondary</li>
+            <li>Ghost · # · ghost</li>
+            <li>Danger · # · danger</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">buttons</span>
+<span class="pu">-</span> <span class="st">Start Module</span> <span class="pu">·</span> <span class="st">/courses/1/modules/1</span> <span class="pu">·</span> <span class="kw">primary</span>
+<span class="pu">-</span> <span class="st">Download</span> <span class="pu">·</span> <span class="st">/files/syllabus.pdf</span> <span class="pu">·</span> <span class="kw">ghost</span> <span class="pu">·</span> <span class="st">download</span>
+
+<span class="cm"># "buttons: center" or "buttons: right" for alignment
+# style: primary | secondary | ghost | danger
+# icon: any name from icons.js
+# position: left (default) | right</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Accordion ─────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-accordion">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Accordion</h3>
+      <span class="sg-component-file">components/accordion.js</span>
+    </div>
+    <p class="sg-component-desc">Collapsible FAQ-style panels. Items are nested lists: the outer <code>li</code> is the heading; its nested <code>ul</code> contains the panel content lines. Height animates with spring easing.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>accordion: FAQ
+              <ul style="display:none"></ul>
+            </li>
+            <li>What is the late policy?
+              <ul>
+                <li>Assignments lose 10% per day. After 5 days, no credit is awarded.</li>
+              </ul>
+            </li>
+            <li>How do I submit work?
+              <ul>
+                <li>Upload your file to the Canvas assignment page.</li>
+                <li>Submissions close at 11:59 PM on the due date.</li>
+              </ul>
+            </li>
+            <li>Where do I find the rubric?
+              <ul>
+                <li>Open the assignment, then click "Show Rubric" in the upper right.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">accordion: FAQ</span>
+<span class="pu">-</span> <span class="st">What is the late policy?</span>
+  <span class="pu">-</span> <span class="st">Assignments lose 10% per day.</span>
+<span class="pu">-</span> <span class="st">How do I submit work?</span>
+  <span class="pu">-</span> <span class="st">Upload to the Canvas assignment page.</span>
+  <span class="pu">-</span> <span class="st">Submissions close at 11:59 PM.</span>
+
+<span class="cm"># "accordion" → no label
+# "accordion: FAQ" → label above</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tabs ───────────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-tabs">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Tabs</h3>
+      <span class="sg-component-file">components/tabs.js</span>
+    </div>
+    <p class="sg-component-desc">ARIA-compliant tab interface. Keyboard navigation: Arrow Left/Right, Home, End. Same nested list structure as Accordion.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>tabs</li>
+            <li>Overview
+              <ul>
+                <li>Welcome to the course. We cover UI design fundamentals over 25 sessions.</li>
+                <li>No prior experience required.</li>
+              </ul>
+            </li>
+            <li>Schedule
+              <ul>
+                <li>Week 1: Introduction to Figma</li>
+                <li>Week 2: Typography fundamentals</li>
+                <li>Week 3: Color theory</li>
+              </ul>
+            </li>
+            <li>Assessment
+              <ul>
+                <li>Weekly design challenges (60%)</li>
+                <li>Final portfolio project (40%)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">tabs</span>
+<span class="pu">-</span> <span class="st">Overview</span>
+  <span class="pu">-</span> <span class="st">Course description here.</span>
+<span class="pu">-</span> <span class="st">Schedule</span>
+  <span class="pu">-</span> <span class="st">Week 1: Intro to Figma</span>
+  <span class="pu">-</span> <span class="st">Week 2: Typography</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Stat Row ───────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-stat-row">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Stat Row</h3>
+      <span class="sg-component-file">components/stat-row.js</span>
+    </div>
+    <p class="sg-component-desc">Animated counter cards. Numbers count up from zero on scroll-into-view. Item format: <code>value · label · color</code>.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>stats</li>
+            <li>87% · Completion Rate · accent</li>
+            <li>12 · Weeks · success</li>
+            <li>5 · Credits · cert</li>
+            <li>24 · Students · degree</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">stats</span>
+<span class="pu">-</span> <span class="st">87%</span> <span class="pu">·</span> <span class="st">Completion Rate</span> <span class="pu">·</span> <span class="kw">accent</span>
+<span class="pu">-</span> <span class="st">12</span> <span class="pu">·</span> <span class="st">Weeks</span> <span class="pu">·</span> <span class="kw">success</span>
+<span class="pu">-</span> <span class="st">5</span> <span class="pu">·</span> <span class="st">Credits</span> <span class="pu">·</span> <span class="kw">#7b68ee</span>
+
+<span class="cm"># color: accent | cert | degree | success | error
+#        neutral | #rrggbb</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Steps ─────────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-steps">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Steps</h3>
+      <span class="sg-component-file">components/steps.js</span>
+    </div>
+    <p class="sg-component-desc">Fancy ordered list with numbered circles. Each step gets a stable anchor ID (<code>trl-step-{hash}-{n}</code>). Linking to a step with <code>#trl-step-…</code> highlights it via <code>:target</code>.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>steps: indigo</li>
+            <li>Download the project files from Canvas Files</li>
+            <li>Open the file in Figma and follow the grid guidelines</li>
+            <li>Design your three screens following the brief</li>
+            <li>Export as PDF and upload to the assignment page</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">steps: indigo</span>
+<span class="pu">-</span> <span class="st">Download the project files</span>
+<span class="pu">-</span> <span class="st">Open in Figma</span>
+<span class="pu">-</span> <span class="st">Export and upload</span>
+
+<span class="cm"># "steps" → default indigo
+# "steps: #22c55e" → hex color
+# "steps: green"   → named color
+# names: blue green purple amber red
+#        pink teal indigo slate</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Carousel ──────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-carousel">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Carousel</h3>
+      <span class="sg-component-file">components/carousel.js</span>
+    </div>
+    <p class="sg-component-desc">Left/right arrow carousel. Supports image slides (auto-lightboxed), plain text slides, and titled card slides with bullet content. Touch swipe and keyboard arrow navigation.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian">
+          <ul>
+            <li>carousel</li>
+            <li>Typography
+              <ul>
+                <li>Type is the foundation of visual design</li>
+                <li>Choose 2 complementary typefaces</li>
+                <li>Establish a clear hierarchy</li>
+              </ul>
+            </li>
+            <li>Color Theory
+              <ul>
+                <li>Start from a single accent hue</li>
+                <li>Use tints and shades, not new colors</li>
+                <li>Check WCAG contrast ratios</li>
+              </ul>
+            </li>
+            <li>Layout &amp; Grid
+              <ul>
+                <li>12-column grid with consistent gutters</li>
+                <li>Align everything to the grid</li>
+                <li>Use whitespace intentionally</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">carousel</span>
+<span class="pu">-</span> <span class="st">![Alt text](image.jpg)</span>  <span class="cm">← image slide</span>
+<span class="pu">-</span> <span class="st">Plain text slide</span>        <span class="cm">← plain slide</span>
+<span class="pu">-</span> <span class="st">Card Title</span>              <span class="cm">← content slide</span>
+  <span class="pu">-</span> <span class="st">Bullet one</span>
+  <span class="pu">-</span> <span class="st">Bullet two</span>
+
+<span class="cm"># Images are auto-lightboxed by lightbox.js</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Flow Accordion ────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-flow-accordion">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Flow Accordion</h3>
+      <span class="sg-component-file">components/flow-panels.js</span>
+    </div>
+    <p class="sg-component-desc">Accordion that collects arbitrary DOM siblings — paragraphs, images, tables, other Trillian components — rather than being limited to list items. A sentinel list triggers the DOM walk; headings (<code>h6</code> by default) divide sections.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian" id="fac-preview">
+          <ul><li>flow-accordion</li></ul>
+          <h6>Week 1: Foundations</h6>
+          <p style="font-size:14px;color:#555">Introduction to Figma, workspace setup, and core interface concepts. Complete the onboarding tutorial before session 2.</p>
+          <h6>Week 2: Typography</h6>
+          <p style="font-size:14px;color:#555">Type hierarchy, pairing, and the grid. Read Chapter 3 of the textbook and complete the type specimen exercise.</p>
+          <h6>Week 3: Color</h6>
+          <p style="font-size:14px;color:#555">Color theory, HSL, and palette construction. Submit your color study by Friday at 11:59 PM.</p>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">flow-accordion</span>
+
+###### <span class="st">Week 1: Foundations</span>
+<span class="st">Any content — paragraphs, images, code blocks,
+other Trillian components…</span>
+
+###### <span class="st">Week 2: Typography</span>
+<span class="st">More arbitrary content here.</span>
+
+<span class="cm"># Use "flow-accordion:h3" to trigger on h3 instead
+# Stops at a higher-level heading or next sentinel</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Flow Tabs ──────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-flow-tabs">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Flow Tabs</h3>
+      <span class="sg-component-file">components/flow-panels.js</span>
+    </div>
+    <p class="sg-component-desc">Same DOM-walk pattern as Flow Accordion but rendered as tabs. Ideal for weekly module content or multi-part assignments where each tab can contain any Trillian component.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian" id="fta-preview">
+          <ul><li>flow-tabs</li></ul>
+          <h6>Overview</h6>
+          <p style="font-size:14px;color:#555">This module covers fundamental Figma skills. You'll need a free Figma account before the first session.</p>
+          <h6>Resources</h6>
+          <p style="font-size:14px;color:#555">Textbook Chapter 1, the Figma beginner tutorial series, and the class Figma workspace (link in the sidebar).</p>
+          <h6>Deliverable</h6>
+          <p style="font-size:14px;color:#555">Upload your workspace screenshot to the Canvas assignment by end of day Sunday.</p>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">flow-tabs</span>
+
+###### <span class="st">Overview</span>
+<span class="st">Module introduction and objectives.</span>
+
+###### <span class="st">Resources</span>
+<span class="st">Links and reading materials.</span>
+
+###### <span class="st">Deliverable</span>
+<span class="st">Submission details and deadline.</span>
+
+<span class="cm"># "flow-tabs:h3" → use h3 as dividers</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Lightbox ───────────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-lightbox">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Lightbox</h3>
+      <span class="sg-component-file">components/lightbox.js</span>
+    </div>
+    <p class="sg-component-desc">Automatic fullscreen viewer applied to every <code>&lt;img&gt;</code> not wrapped in a link. Click to open; Escape or click backdrop to close. Alt text becomes the caption. No markup required.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview — click any image</div>
+        <div class="sg-preview trillian">
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <img src="https://picsum.photos/seed/trl1/200/140" alt="A scenic mountain landscape at dusk" style="border-radius:8px;max-width:160px;display:block">
+            <img src="https://picsum.photos/seed/trl2/200/140" alt="Abstract geometric pattern in blue and white" style="border-radius:8px;max-width:160px;display:block">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="cm"># No markup needed — automatic on all images
+# Standard markdown image syntax:</span>
+!<span class="pu">[</span><span class="st">Alt text / caption</span><span class="pu">](</span><span class="kw">image-url.jpg</span><span class="pu">)</span>
+
+<span class="cm"># Wrap in a link to disable lightbox:
+# [![alt](thumb.jpg)](full.jpg)</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Code Highlight ─────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-code">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Code Highlight</h3>
+      <span class="sg-component-file">components/code-highlight.js</span>
+    </div>
+    <p class="sg-component-desc">Syntax highlighting via Prism.js. Applied automatically to all <code>&lt;pre&gt;&lt;code class="language-*"&gt;</code> blocks — standard output from Canvas's markdown renderer. No markup required.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian" style="padding:0;overflow:hidden;background:#f6f8fa">
+          <pre><code class="language-javascript">function greet(name) {
+  const msg = `Hello, ${name}!`;
+  console.log(msg);
+  return msg;
+}</code></pre>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="cm">```javascript</span>
+<span class="st">function greet(name) {</span>
+<span class="st">  return `Hello, ${name}!`;</span>
+<span class="st">}</span>
+<span class="cm">```</span>
+
+<span class="cm"># Languages: javascript, jsx, typescript,
+#   css, markup, python, bash, json, markdown</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Progress Dashboard ─────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-progress">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Progress Dashboard</h3>
+      <span class="sg-component-file">components/progress-dashboard.js</span>
+    </div>
+    <p class="sg-component-desc">Student progress visualization with an animated arc gauge (credits earned), session label, and milestone progress bars for short certificate, certificate, and degree completion.</p>
+
+    <div class="sg-demo-pair">
+      <div>
+        <div class="sg-demo-label">Preview</div>
+        <div class="sg-preview trillian" style="background:#f4f4f4">
+          <ul>
+            <li>progress-dashboard</li>
+            <li>session: 12</li>
+            <li>module: 3</li>
+            <li>course-name: UI Design</li>
+            <li>course-code: BUS 261</li>
+            <li>course-order: 4</li>
+            <li>total-sessions: 25</li>
+            <li>credits-per-course: 5</li>
+            <li>milestone-mini: 20</li>
+            <li>milestone-cert: 45</li>
+            <li>milestone-degree: 90</li>
+            <li>program-short-name: Design Essentials</li>
+            <li>program-cert-name: Digital Design</li>
+            <li>program-degree-name: Graphic Design &amp; Web</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sg-demo-label">Markdown</div>
+        <div class="sg-code"><pre><span class="pu">-</span> <span class="kw">progress-dashboard</span>
+<span class="pu">-</span> <span class="pu">session:</span> <span class="st">12</span>
+<span class="pu">-</span> <span class="pu">module:</span> <span class="st">3</span>
+<span class="pu">-</span> <span class="pu">course-name:</span> <span class="st">UI Design</span>
+<span class="pu">-</span> <span class="pu">course-code:</span> <span class="st">BUS 261</span>
+<span class="pu">-</span> <span class="pu">course-order:</span> <span class="st">4</span>
+<span class="pu">-</span> <span class="pu">milestone-mini:</span> <span class="st">20</span>
+<span class="pu">-</span> <span class="pu">milestone-cert:</span> <span class="st">45</span>
+<span class="pu">-</span> <span class="pu">milestone-degree:</span> <span class="st">90</span>
+<span class="pu">-</span> <span class="pu">program-short-name:</span> <span class="st">Design Essentials</span>
+<span class="pu">-</span> <span class="pu">program-cert-name:</span> <span class="st">Digital Design</span>
+<span class="pu">-</span> <span class="pu">program-degree-name:</span> <span class="st">Graphic Design &amp; Web</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pace Dashboard ─────────────────────────────────────────────────────── -->
+  <div class="sg-component" id="c-pace">
+    <div class="sg-component-header">
+      <h3 class="sg-component-name">Pace Dashboard</h3>
+      <span class="sg-component-file">components/pace-dashboard.js</span>
+    </div>
+    <p class="sg-component-desc">Reading rate gauge. Measures actual pages/day ÷ required pages/day — <em>pace = 1.0 means exactly on schedule</em>. Reads engagement data written by <code>page-tracker.js</code>. Optionally projects program milestone dates based on credit accumulation rate.</p>
+
+    <div class="sg-code" style="margin-bottom:16px"><pre><span class="pu">-</span> <span class="kw">pace-dashboard</span>
+<span class="pu">-</span> <span class="pu">total-pages:</span>  <span class="st">48</span>
+<span class="pu">-</span> <span class="pu">start-date:</span>   <span class="st">2026-01-05</span>
+<span class="pu">-</span> <span class="pu">end-date:</span>     <span class="st">2026-05-01</span>
+<span class="pu">-</span> <span class="pu">target-date:</span>  <span class="st">2026-04-15</span>   <span class="cm">← optional on/off-track pill</span>
+<span class="pu">-</span> <span class="pu">pace-metric:</span>  <span class="st">counted</span>       <span class="cm">← visited | counted | completed</span>
+<span class="pu">-</span> <span class="pu">program-start-date:</span> <span class="st">2025-09-01</span>
+<span class="pu">-</span> <span class="pu">credits-earned:</span>     <span class="st">15</span>
+<span class="pu">-</span> <span class="pu">credits-per-course:</span> <span class="st">5</span></pre></div>
+
+    <table class="sg-api">
+      <thead><tr><th>Key</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>total-pages</code></td><td>—</td><td>Number of Canvas pages in the course</td></tr>
+        <tr><td><code>start-date</code></td><td>—</td><td>Course start date (YYYY-MM-DD)</td></tr>
+        <tr><td><code>end-date</code></td><td>—</td><td>Course end date (YYYY-MM-DD)</td></tr>
+        <tr><td><code>target-date</code></td><td>—</td><td>Optional deadline for on/off-track pill</td></tr>
+        <tr><td><code>pace-metric</code></td><td>counted</td><td><code>visited</code> | <code>counted</code> | <code>completed</code></td></tr>
+        <tr><td><code>program-start-date</code></td><td>—</td><td>When student entered the program (enables outlook section)</td></tr>
+        <tr><td><code>credits-earned</code></td><td>0</td><td>Credits fully completed before this course</td></tr>
+        <tr><td><code>credits-per-course</code></td><td>5</td><td>Credit value of the current course</td></tr>
+        <tr><td><code>milestone-mini</code></td><td>20</td><td>Credits for short certificate</td></tr>
+        <tr><td><code>milestone-cert</code></td><td>45</td><td>Credits for certificate</td></tr>
+        <tr><td><code>milestone-degree</code></td><td>90</td><td>Credits for AAS degree</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <footer class="sg-footer">
+    Trillian Design System — open source, Canvas LMS.
+    Component CSS scoped to <code>.trillian</code>.
+    Tokens at <code>:root</code> via <code>dist/trillian.css</code>.
+    Architecture documented in <code>decisions/001-css-architecture.md</code>.
+  </footer>
+
+</main>
+
+<script src="../dist/trillian.js"></script>
+<script>
+  // ── Active nav link on scroll ──────────────────────────────────────────────
+  const navLinks = document.querySelectorAll('.sg-nav a');
+  const targets  = Array.from(navLinks)
+    .map(a => ({ a, el: document.querySelector(a.getAttribute('href')) }))
+    .filter(x => x.el);
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const match = targets.find(t => t.el === e.target);
+        if (match) match.a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '-80px 0px -60% 0px' });
+
+  targets.forEach(({ el }) => obs.observe(el));
+</script>
+</body>
+</html>
